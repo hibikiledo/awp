@@ -29,6 +29,9 @@ export default class TextInput extends Component {
   componentDidUpdate() {
     this.props.onChange(this.state.value);
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.value !== nextState.value;
+  }
   render() {
     const {
       onChange,
