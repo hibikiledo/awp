@@ -33,7 +33,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={App} />
         <Route path="/create" component={CreateRoomPage} />
-        <Route path="/room/:id" component={RoomPage} />
+        <Route path="/r/:id" component={RoomPage} />
       </div>
     </ConnectedRouter>
   </Provider>,

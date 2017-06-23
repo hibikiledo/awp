@@ -9,13 +9,13 @@ import { push } from 'react-router-redux'
 
 class App extends Component {
   render() {
-    console.log(this.props)
     return (
       <div className="App">
-        <input type="text" />
+        <input type="text" ref="token" />
         <button onClick={() => {
-          console.log('clicked')
-          this.props.dispatch(push('/create'))
+          console.log(this.refs.token.value)
+          let token = this.refs.token.value
+          this.props.dispatch(push(`/r/${token}`))
         }}
         >
           JOIN
