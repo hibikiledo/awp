@@ -1,3 +1,6 @@
+import Layout from '../components/layout'
 export default () => (
-  <h1>First Page!</h1>
+  <Layout>
+    <h1>First page</h1>
+  </Layout>
 );
