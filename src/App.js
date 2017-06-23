@@ -13,7 +13,6 @@ class App extends Component {
       <div className="App">
         <input type="text" ref="token" />
         <button onClick={() => {
-          console.log(this.refs.token.value)
           let token = this.refs.token.value
           this.props.dispatch(push(`/r/${token}`))
         }}
