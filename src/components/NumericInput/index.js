@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export default class TextInput extends Component {
   static propTypes = {
     value: PropTypes.number,
-    onChange: PropTypes.func
+    onChange: PropTypes.func.isRequired
   }
   constructor(props) {
     super(props);
