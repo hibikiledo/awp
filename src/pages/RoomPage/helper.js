@@ -1,15 +1,25 @@
 import React, { Component } from 'react';
 import { fromJS } from 'immutable'
-import actionFactory from './actions'
 
 let hotReloadComponentState = null
 
-export function RoomPageConnect(fn) {
+/**
+ * actionsFactory function require 3 params, roomId, roomRef, setState
+ * 
+ * @param {*} roomIdFn 
+ * @param {*} actionsFactory 
+ */
+export function RoomPageConnect(roomIdFn, actionsFactory) {
+  console.log("[HMR] Reload with previous state:", hotReloadComponentState)
   return function(WrappedComp) {
     class RoomPageFirebase extends Component {
       constructor(props, ctx) {
         super(props, ctx)
         this.state = hotReloadComponentState
+
+        this.roomId = roomIdFn(this.props)
+        this.roomRef = global.firebase.database().ref(`room/${this.roomId}`)
+        this.actions = actionsFactory(this.roomId, this.roomRef, this.setState.bind(this))
       }
 
       shouldComponentUpdate(nextProps, nextState) {
@@ -20,8 +30,8 @@ export function RoomPageConnect(fn) {
       }
 
       componentDidMount() {
-        const id = fn(this.props)
-        const ref = global.firebase.database().ref(`room/${id}`)
+        const id = this.roomId
+        const ref = this.roomRef
         ref.on('value', (s) => {
           if (!s.val()) {
             return this.setState(() => {
@@ -33,12 +43,10 @@ export function RoomPageConnect(fn) {
 
           this.setState((state, props) => {
             return {
-              room: (s.val())
+              room: fromJS(s.val())
             }
           })
         })
-
-        this.actions = actionFactory.call(this, id, ref)
 
         // setInterval(() => {
         //   ref.update({
@@ -56,7 +64,7 @@ export function RoomPageConnect(fn) {
           return <div>{this.state.error}</div>
         }
 
-        return <WrappedComp {...this.props} room={this.state.room} me={this.state.me} actions={this.actions} />
+        return <WrappedComp {...this.props} {...this.state} actions={this.actions} />
       }
     }
 

@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash'
 import { RoomPageConnect } from './helper'
+import actionsFactory from './actions'
+
+const RestaurantCard = (r) => {
+  if (!r) {
+    return;
+  }
+  return (
+    <div>
+      {r.get('name')}
+    </div>
+  )
+}
 
 class RoomPage extends Component {
   constructor(props, ctx) {
@@ -10,34 +22,48 @@ class RoomPage extends Component {
   }
 
   renderSetName = () => {
-    const { actions } = this.props
+    const { setName } = this.props.actions
     return (
       <div>
         <h1>Enter your name</h1>
         <input type="text" ref="name" />
-        <button onClick={() => { actions.setName(this.refs.name.value) }}>Join</button>
+        <button onClick={() => { setName(this.refs.name.value) }}>Join</button>
       </div>
     )
   }
 
-  render() {
-    const { actions, me, room } = this.props
-    console.log(room)
-
-    if (!me) {
-      return this.renderSetName(this)
-    }
+  renderSelectRestaurant = () => {
+    //room is ImmutableJS object
+    const { room } = this.props
+    const { updateRestaurantsNearby } = this.props.actions
+    console.log(room.toJS())
 
     return (
       <div>
         <h1>Room page</h1>
         <div>
-          {_.map(room.members, (name, idx) => {
-            return <span key={idx}>{name}</span>
+          <h2>Restaurants: <button onClick={() => updateRestaurantsNearby()}>Show nearby</button></h2>
+          {(room.get('restaurants') || []).map((r, idx) => {
+
+          })}
+        </div>
+        <div>
+          <h2>Members:</h2>
+          {room.get('members').toArray().map((name, idx) => {
+            return <span key={idx}>{name} </span>
           })}
         </div>
       </div>
     )
+  }
+
+  render() {
+    const { me } = this.props
+    if (!me) {
+      return this.renderSetName()
+    } else {
+      return this.renderSelectRestaurant()
+    }
   }
 }
 
@@ -47,4 +73,8 @@ const mapState = (state, { match }) => {
   }
 };
 
-export default connect(mapState)(RoomPageConnect(({ roomId }) => roomId)(RoomPage))
+export default connect(mapState)(
+  RoomPageConnect(
+    ({ roomId }) => roomId, 
+    actionsFactory)(RoomPage)
+)
