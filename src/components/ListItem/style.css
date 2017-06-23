@@ -1,0 +1,41 @@
+.list-item {
+  border-bottom: solid 1px #e0e0e0;
+}
+
+.list-item > .pull-left {
+    float: left;
+    width: 70%;
+}
+
+.list-item > .pull-right {
+    float: right;
+    width: 30%;
+}
+
+.list-item > .clear {
+    clear: both;
+}
+
+.list-item .title,
+.list-item .right-item {
+    line-height: 18px;
+    font-family: Roboto;
+    font-size: 15px;
+    text-align: left;
+    color: #242424;
+    padding: 8px;
+}
+
+.list-item .right-item {
+    text-align: right;
+}
+
+.list-item .description {
+    line-height: 16px;
+    font-family: Roboto;
+    font-size: 14px;
+    text-align: left;
+    color: #9a9a9a;
+    padding: 4px 8px;
+    margin-bottom: 12px;
+}
