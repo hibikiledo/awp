@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class RoomPageFirebase extends Component {
   constructor(props, ctx) {
@@ -49,12 +49,14 @@ class RoomPage extends Component {
     super(props, ctx)
     this.state = null
   }
-  
+
   render() {
-    console.log(this.props)
+    const room = this.props.room
+    console.log(room)
     return (
       <div>
         <h1>Room page</h1>
+        <span>{room.time}</span>
       </div>
     )
   }
