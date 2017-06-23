@@ -5,6 +5,11 @@
   "repository": "git@github.com:hibikiledo/awp.git",
   "author": "awp-team",
   "license": "MIT",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
   "dependencies": {
     "next": "beta",
     "react": "^15.6.1",
