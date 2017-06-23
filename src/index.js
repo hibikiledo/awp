@@ -11,6 +11,7 @@ import thunk from 'redux-thunk';
 import Routes from './routes'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
+import { AppContainer } from 'react-hot-loader'
 
 const history = createHistory()
 const middleware = routerMiddleware(history)
@@ -22,11 +23,13 @@ const store = createStore(
 
 function render(Comp) {
   ReactDOM.render(
-    <Provider store={store}>
-      <ConnectedRouter history={history}>
-        <Comp />
-      </ConnectedRouter>
-    </Provider>,
+    <AppContainer>
+      <Provider store={store}>
+        <ConnectedRouter history={history}>
+          <Comp />
+        </ConnectedRouter>
+      </Provider>
+    </AppContainer>,
     document.getElementById('root'))
 }
 
@@ -35,7 +38,8 @@ registerServiceWorker();
 
 if (module.hot) {
   module.hot.accept('./routes', () => {
-    render(Routes)
+    const NextRoutes = require('./routes').default
+    render(NextRoutes)
   })
   module.hot.accept('./reducers', () => {
     store.replaceReducer(reducers)
