@@ -1,0 +1,8 @@
+{
+  "name": "awp",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:hibikiledo/awp.git",
+  "author": "awp-team",
+  "license": "MIT"
+}
