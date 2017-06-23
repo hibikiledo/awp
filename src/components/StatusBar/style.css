@@ -1,0 +1,31 @@
+.status-bar {
+
+}
+.status-bar > .indicators {
+  display: flex;
+  margin: 0 -2px;
+}
+.status-bar > .indicators > .indicator {
+  flex: 1 0 auto;
+  margin: 0 2px;
+  height: 4px;
+  background: #d8d8d8;
+  border-radius: 1px;
+}
+.status-bar > .indicators > .indicator.active {
+  background: #e21a00
+}
+.status-bar > .info {
+  display: flex;
+  margin-top: 8px;
+  color: #424242;
+  font-family: Roboto, Arial;
+}
+.status-bar > .info > .state-name {
+  flex: 1 0 auto;
+  text-align: left;
+}
+.status-bar > .info > .time-remaining {
+  flex: 1 0 auto;
+  text-align: right;
+}
