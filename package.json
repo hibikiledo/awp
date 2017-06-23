@@ -13,7 +13,8 @@
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
-    "redux": "^3.7.0"
+    "redux": "^3.7.0",
+    "redux-devtools-extension": "^2.13.2"
   },
   "devDependencies": {
     "react-scripts": "1.0.7"

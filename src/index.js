@@ -9,6 +9,7 @@ import { Provider } from 'react-redux'
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Route } from 'react-router'
+import { composeWithDevTools } from 'redux-devtools-extension';
 import createHistory from 'history/createBrowserHistory'
 import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker';
@@ -21,7 +22,7 @@ const store = createStore(
     ...reducers,
     router: routerReducer
   }),
-  applyMiddleware(middleware)
+  composeWithDevTools(applyMiddleware(middleware))
 )
 
 ReactDOM.render(

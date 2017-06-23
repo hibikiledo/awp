@@ -17,7 +17,9 @@ class App extends Component {
           console.log('clicked')
           this.props.dispatch(push('/create'))
         }}
-        >JOIN</button>
+        >
+          JOIN
+        </button>
         <Link to='/create'>Create new room</Link>
       </div>
     );
