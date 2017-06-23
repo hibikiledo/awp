@@ -13,6 +13,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import createHistory from 'history/createBrowserHistory'
 import reducers from './reducers'
 import registerServiceWorker from './registerServiceWorker';
+import thunk from 'redux-thunk';
 
 const history = createHistory()
 const middleware = routerMiddleware(history)
@@ -22,7 +23,7 @@ const store = createStore(
     ...reducers,
     router: routerReducer
   }),
-  composeWithDevTools(applyMiddleware(middleware))
+  composeWithDevTools(applyMiddleware(middleware, thunk))
 )
 
 ReactDOM.render(
