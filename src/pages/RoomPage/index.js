@@ -13,7 +13,7 @@ class RoomPage extends Component {
     const { actions } = this.props
     return (
       <div>
-        <h1>Enter your name 2</h1>
+        <h1>Enter your name</h1>
         <input type="text" ref="name" />
         <button onClick={() => { actions.setName(this.refs.name.value) }}>Join</button>
       </div>

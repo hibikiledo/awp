@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import { fromJS } from 'immutable'
 import actionFactory from './actions'
 
+let hotReloadComponentState = null
+
 export function RoomPageConnect(fn) {
   return function(WrappedComp) {
     class RoomPageFirebase extends Component {
       constructor(props, ctx) {
         super(props, ctx)
-        this.state = null
+        this.state = hotReloadComponentState
+      }
+
+      shouldComponentUpdate(nextProps, nextState) {
+        if (module.hot) {
+          hotReloadComponentState = nextState
+        }
+        return this.props !== nextProps || this.state !== nextState
       }
 
       componentDidMount() {
