@@ -1,0 +1,19 @@
+.text-input {
+  width: 100%;
+  box-sizing: border-box;
+  line-height: 32px;
+  padding: 4px 8px 3px 8px;
+  font-family: Roboto, Arial;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  text-align: left;
+  color: #424242;
+  border: none;
+  border-bottom: solid 1px #9e9e9e;
+  outline: none;
+}
+
+.text-input::placeholder {
+  color: #9e9e9e;
+}
