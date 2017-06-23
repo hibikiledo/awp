@@ -11,4 +11,6 @@ const RootPage = () => (
   </Layout>
 );
 
+
+
 export default withRedux(initStore)(RootPage)
