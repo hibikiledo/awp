@@ -4,7 +4,6 @@ export default ({ children, title }) => (
   <div>
     <Head>
       <title>{title}</title>
-      <script></script>
     </Head>
     <header>
       <nav></nav>

@@ -12,8 +12,12 @@
   },
   "dependencies": {
     "next": "beta",
+    "next-redux-wrapper": "^1.1.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "redux": "^3.7.0"
+    "react-redux": "^5.0.5",
+    "react-redux-firebase": "^1.4.2",
+    "redux": "^3.7.0",
+    "redux-thunk": "^2.2.0"
   }
 }
