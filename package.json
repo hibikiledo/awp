@@ -18,7 +18,8 @@
     "react-redux": "^5.0.5",
     "react-redux-firebase": "^1.4.2",
     "redux": "^3.7.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
     "redux-devtools-extension": "^2.13.2"
