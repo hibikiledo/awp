@@ -8,6 +8,7 @@ import CreateRoomPage from './pages/CreateRoomPage'
 import { Provider } from 'react-redux'
 import React from 'react';
 import ReactDOM from 'react-dom';
+import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createHistory from 'history/createBrowserHistory'
@@ -32,6 +33,7 @@ ReactDOM.render(
       <div>
         <Route exact path="/" component={App} />
         <Route path="/create" component={CreateRoomPage} />
+        <Route path="/room/:id" component={RoomPage} />
       </div>
     </ConnectedRouter>
   </Provider>,
