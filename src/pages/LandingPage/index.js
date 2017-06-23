@@ -1,10 +1,7 @@
-import './App.css';
-
 import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import logo from './logo.svg';
 import { push } from 'react-router-redux'
 
 class App extends Component {

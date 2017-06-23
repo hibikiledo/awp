@@ -1,10 +1,8 @@
-import './index.css';
-
 import { ConnectedRouter, push, routerMiddleware, routerReducer } from 'react-router-redux'
 import { applyMiddleware, combineReducers, createStore } from 'redux'
 
-import App from './App';
 import CreateRoomPage from './pages/CreateRoomPage'
+import LandingPage from './pages/LandingPage';
 import OrderPage from './pages/OrderPage';
 import { Provider } from 'react-redux'
 import React from 'react';
@@ -34,7 +32,7 @@ ReactDOM.render(
   <Provider store={store}>
     <ConnectedRouter history={history}>
       <div>
-        <Route exact path="/" component={App} />
+        <Route exact path="/" component={LandingPage} />
         <Route exact path="/create" component={CreateRoomPage} />
         <Route exact path="/r/:id" component={RoomPage} />
         <Route exact path='/r/:id/vote' component={VotePage} />
