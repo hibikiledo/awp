@@ -15,7 +15,7 @@ class App extends Component {
         <input type="text" />
         <button onClick={() => {
           console.log('clicked')
-          this.props.history.push('/create')
+          this.props.dispatch(push('/create'))
         }}
         >JOIN</button>
         <Link to='/create'>Create new room</Link>
@@ -24,4 +24,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);
