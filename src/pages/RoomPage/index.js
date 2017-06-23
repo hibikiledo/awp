@@ -1,71 +1,50 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import PropTypes from 'prop-types';
-
-class RoomPageFirebase extends Component {
-  constructor(props, ctx) {
-    super(props, ctx)
-    this.state = null
-  }
-
-  componentDidMount() {
-    const id = this.props.roomId
-    const ref = global.firebase.database().ref(`room/${id}`)
-    ref.on('value', (s) => {
-      this.setState(s.val())
-    })
-
-    // setInterval(() => {
-    //   ref.update({
-    //     time: new Date().getTime()
-    //   })
-    // }, 1000)
-  }
-
-  render() {
-    if (!this.state) {
-      return <div>Loading...</div>
-    }
-
-    // console.log(this.state)
-    const props = this.props
-    const ChildComp = this.props.component
-    return <ChildComp {...props} room={this.state} />
-  }
-}
-
-function RoomPageConnect(fn) {
-  return function(comp) {
-    return function(props) {
-      const id = fn(props)
-      return <RoomPageFirebase roomId={id} component={comp} />
-    }
-  }
-}
+import _ from 'lodash'
+import { RoomPageConnect } from './helper'
 
 class RoomPage extends Component {
   constructor(props, ctx) {
     super(props, ctx)
     this.state = null
   }
-  
+
+  renderSetName = () => {
+    const { actions } = this.props
+    return (
+      <div>
+        <h1>Enter your name 2</h1>
+        <input type="text" ref="name" />
+        <button onClick={() => { actions.setName(this.refs.name.value) }}>Join</button>
+      </div>
+    )
+  }
+
   render() {
-    console.log(this.props)
+    const { actions, me, room } = this.props
+    console.log(room)
+
+    if (!me) {
+      return this.renderSetName(this)
+    }
+
     return (
       <div>
         <h1>Room page</h1>
+        <div>
+          {_.map(room.members, (name, idx) => {
+            return <span key={idx}>{name}</span>
+          })}
+        </div>
       </div>
     )
   }
 }
 
-const mapState = (state, {match}) => {
+const mapState = (state, { match }) => {
   return {
     roomId: match.params.id
   }
 };
 
-const mapAction = {}
-
-export default connect(mapState)(RoomPageConnect(({roomId}) => roomId)(RoomPage))
+export default connect(mapState)(RoomPageConnect(({ roomId }) => roomId)(RoomPage))
