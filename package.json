@@ -19,13 +19,16 @@
   },
   "devDependencies": {
     "firebase-tools": "^3.9.1",
-    "react-scripts": "1.0.7"
+    "react-scripts": "1.0.7",
+    "@storybook/react": "^3.1.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "deploy": "npm run build && firebase deploy"
+    "deploy": "npm run build && firebase deploy",
+    "storybook": "start-storybook -p 9009 -s public",
+    "build-storybook": "build-storybook -s public"
   }
 }
