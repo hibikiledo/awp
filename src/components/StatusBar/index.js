@@ -18,8 +18,8 @@ export default function StatusBar({
   return (
     <div className="status-bar">
       <div className="indicators">
-        {states.map((state) => (
-          <span className={`indicator ${state === currentState ? 'active': ''}`} />
+        {states.map((state, idx) => (
+          <span key={idx} className={`indicator ${state === currentState ? 'active': ''}`} />
         ))}
       </div>
       <div className="info">

@@ -17,8 +17,10 @@ function Toast({ toasts }) {
             right: 0,
             zIndex: 1,
         }}>
-            {toasts.map((msg) => (
-                <div style={{
+            {toasts.map((msg, idx) => (
+                <div
+                    key={idx}
+                    style={{
                     padding: '12px',
                     fontFamily: 'Roboto, Arial',
                     background: '#444',
