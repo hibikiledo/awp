@@ -145,11 +145,21 @@ export const OrderPageActions = {
 
 export const VotePageActions = {
   voteForRestaurant: (me, roomId, restaurantId) => (dispatch, getState, firebase) => {
+    const { room } = getState()
+    const numVotesByMe = _.values(room.restaurants)
+      .map((restaurant) => {
+        return _.keys(restaurant.votes).filter((voter) => voter === me)
+      })
+      .reduce(_.add, 0)
+
     firebase
       .database()
       .ref(`room/${roomId}/restaurants/${restaurantId}/votes/${me}`)
       .transaction((currentVotes) => {
-        return currentVotes === 1 ? currentVotes : currentVotes + 1
+        if (numVotesByMe === 0) {
+          return currentVotes + 1
+        }
+        return currentVotes
       })
   }
 }
