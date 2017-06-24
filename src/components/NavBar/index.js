@@ -19,6 +19,7 @@ export default function NavBar({
   onAppIconClick,
   onCopyIconClick,
   onShareIconClick,
+  showCopy,
   icons,
   title
 }) {
@@ -26,8 +27,9 @@ export default function NavBar({
     <div className="nav-bar">
       <img className="app-icon left" src={circularIcon} onClick={() => onAppIconClick()}/>
       <span className="title">{title}</span>
-      <img className="action-icon first" src={copyIcon} onClick={() => onCopyIconClick()}/>
-      <img className="action-icon" src={shareIcon} onClick={() => onShareIconClick()}/>
+      {showCopy ? 
+        <img className="action-icon first" src={copyIcon} id="clipboard" onClick={() => onCopyIconClick()}/>
+        : null}
     </div>
   )
 }

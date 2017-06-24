@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
+import copyClipbaord from './clipboard'
 
 let currentChatRoomRef = null
 
@@ -21,9 +22,10 @@ export function pushNotify(message) {
   if (!("Notification" in window)) {
     return;
   }
-  requestPush(() => {
-    let notification = new Notification(message)
-  })
+  // Todo: This breaks when run with service worker
+  // requestPush(() => {
+  //   let notification = new Notification(message)
+  // })
 }
 
 export const ChatActions = {
@@ -64,7 +66,16 @@ export const AppActions = {
     dispatch(createAction('ADD_TOAST')(msg))
     setTimeout(() => dispatch(createAction('DELETE_TOAST')(msg)), 3000)
   },
-  setMe: createAction('SET_ME')
+  setMe: createAction('SET_ME'),
+  copyLink: () => (dispatch, getState) => {
+    const roomPin = getState().roomPin
+    console.log("Copying url with pin:", roomPin, msg)
+    if (!roomPin) {
+      return;
+    }
+    const msg = `https://awp-pwa.firebaseapp.com/r/${roomPin}`
+    copyClipbaord(msg)
+  }
 }
 
 export const LandingPageActions = {
@@ -76,6 +87,7 @@ export const LandingPageActions = {
         const val = s.val()
         if (val) {
           dispatch(AppActions.setRoom(val))
+          dispatch(AppActions.setRoomPin(pin))
           dispatch(push('/r/' + pin));
         } else {
           dispatch(AppActions.addToast('Invalid Pin'))
@@ -191,21 +203,35 @@ export const OrderPageActions = {
 
 export const VotePageActions = {
   voteForRestaurant: (me, roomId, restaurantId) => (dispatch, getState, firebase) => {
+    const { room } = getState()
+    const numVotesByMe = _.values(room.restaurants)
+      .map((restaurant) => {
+        return _.keys(restaurant.votes).filter((voter) => voter === me)
+      })
+      .reduce(_.add, 0)
+
     firebase
       .database()
       .ref(`room/${roomId}/restaurants/${restaurantId}/votes/${me}`)
       .transaction((currentVotes) => {
-        return currentVotes === 1 ? currentVotes : currentVotes + 1
+        if (numVotesByMe === 0) {
+          return currentVotes + 1
+        }
+        return currentVotes
       })
   }
 }
 
 export const RestaurantPageActions = {
   addRestaurant: (roomId, name, nominator, imageUrl) => (dispatch, getState, firebase) => {
+    if (!name) {
+      return dispatch(AppActions.addToast("Restaurant name cannot be empty."))
+    }
     firebase
       .database()
       .ref(`room/${roomId}/restaurants`)
       .push({ name, nominator, imageUrl })
+      .then(() => dispatch(RestaurantPageActions.closeRestaurantSearchBox()))
   },
   openRestaurantSearchBox: createAction('OPEN_RESTAURANT_SEARCH_BOX'),
   closeRestaurantSearchBox: createAction('CLOSE_RESTAURANT_SEARCH_BOX')
