@@ -1,0 +1,17 @@
+.room-pin > .label {
+	font-family: Roboto, Arial;
+	font-size: 16px;
+	font-weight: 900;
+  line-height: 19px;
+	text-align: center;
+	color: #424242;
+  margin-bottom: 15px;
+}
+
+.room-pin > .pin {
+	line-height: 57px;
+	font-family: Roboto, Arial;
+	font-size: 48px;
+	color: #424242;
+  margin: 0;
+}
