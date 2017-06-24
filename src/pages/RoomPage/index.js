@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import _ from 'lodash'
+
 import { RoomPageConnect } from './helper'
+import _ from 'lodash'
 import actionsFactory from './actions'
+import { connect } from 'react-redux';
 
 const RestaurantCard = (r) => {
   if (!r) {
@@ -75,6 +76,6 @@ const mapState = (state, { match }) => {
 
 export default connect(mapState)(
   RoomPageConnect(
-    ({ roomId }) => roomId, 
+    ({ roomId }) => roomId,
     actionsFactory)(RoomPage)
 )

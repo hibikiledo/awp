@@ -1,0 +1,40 @@
+.restaurant-card {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 2px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+}
+
+.restaurant-card>.image {
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+}
+
+.restaurant-card>.image>img {
+    display: none;
+}
+
+.restaurant-card>.title {
+    padding: 4px 8px;
+    font-family: Roboto, Arial;
+    font-size: 14px;
+    line-height: 16px;
+    font-weight: 500;
+    text-align: left;
+    color: #424242;
+}
+
+.restaurant-card>.description {
+    padding: 0px 8px 8px 8px;
+    font-family: Roboto, Arial;
+    font-size: 10px;
+    line-height: 11px;
+    text-align: left;
+    color: #757575;
+}
+
+.restaurant-card>.description>.highlight {
+    color: #ff672b;
+}
