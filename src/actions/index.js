@@ -22,9 +22,10 @@ export function pushNotify(message) {
   if (!("Notification" in window)) {
     return;
   }
-  requestPush(() => {
-    let notification = new Notification(message)
-  })
+  // Todo: This breaks when run with service worker
+  // requestPush(() => {
+  //   let notification = new Notification(message)
+  // })
 }
 
 export const ChatActions = {
@@ -156,11 +157,21 @@ export const OrderPageActions = {
 
 export const VotePageActions = {
   voteForRestaurant: (me, roomId, restaurantId) => (dispatch, getState, firebase) => {
+    const { room } = getState()
+    const numVotesByMe = _.values(room.restaurants)
+      .map((restaurant) => {
+        return _.keys(restaurant.votes).filter((voter) => voter === me)
+      })
+      .reduce(_.add, 0)
+
     firebase
       .database()
       .ref(`room/${roomId}/restaurants/${restaurantId}/votes/${me}`)
       .transaction((currentVotes) => {
-        return currentVotes === 1 ? currentVotes : currentVotes + 1
+        if (numVotesByMe === 0) {
+          return currentVotes + 1
+        }
+        return currentVotes
       })
   }
 }
