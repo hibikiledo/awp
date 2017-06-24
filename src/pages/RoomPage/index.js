@@ -155,8 +155,8 @@ class RoomPage extends Component {
   }
 
   getPage(roomState) {
-    switch (this.state.roomState) {
-    // switch('Nominate') {
+    // switch (this.state.roomState) {
+    switch('Nominate') {
       case 'Nominate':
         return <RestaurantPage />;
       case 'Vote':
@@ -169,21 +169,21 @@ class RoomPage extends Component {
   }
 
   render() {
-    return <OrderPage />;
-    // if (!this.props.me) {
-    //   return this.renderSetName()
-    // } else if (this.props.me && this.props.room) {
-    //   return (
-    //     <div>
-    //       <StatusBar
-    //         states={states}
-    //         currentState={this.state.roomState}
-    //         remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
-    //     </div>
-    //   )
-    // } else {
-    //   return null
-    // }
+    // return <OrderPage />;
+    if (!this.props.me) {
+      return this.renderSetName()
+    } else if (this.props.me && this.props.room) {
+      return (
+        <div>
+          <StatusBar
+            states={states}
+            currentState={this.state.roomState}
+            remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }
 
