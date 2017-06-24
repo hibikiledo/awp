@@ -1,0 +1,43 @@
+.message-container {
+  height: 50px;
+  padding: 4px 16px 4px 16px;
+}
+
+.display-name {
+  font-family: Thonburi,Arial;
+  font-size: 12px;
+  text-align: right;
+  color: #424242;
+}
+
+.my-message-container {
+  align-content: left;
+  float: right;
+}
+
+.their-message-container {
+  align-content: right;
+  float: left;
+}
+
+.my-message {
+  width: fit-content;
+  border-radius: 4px;
+  background-color: #e21a00;
+  padding: 8px 20px 8px 20px;
+  font-family: Roboto,Arial;
+  font-size: 16px;
+  text-align: right;
+  color: #ffffff;
+}
+
+.their-message {
+  width: fit-content;
+  border-radius: 4px;
+  background-color: #e0e0e0;
+  padding: 8px 20px 8px 20px;
+  font-family: Roboto,Arial;
+  font-size: 16px;
+  text-align: left;
+  color: #424242;
+}
