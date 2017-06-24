@@ -2,12 +2,13 @@ import {ChatActions, RoomPageActions} from '../../actions'
 import React, {Component} from 'react';
 
 import OrderPage from './pages/OrderPage'
+import Orderpage from './pages/OrderPage'
+import RestaurantPage from './pages/RestaurantPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import {RoomPageConnect} from './helper'
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
 import VotePage from './pages/VotePage'
-import Orderpage from './pages/OrderPage'
 import _ from 'lodash'
 import actionsFactory from './actions'
 import {bindActionCreators} from 'redux'
@@ -142,9 +143,10 @@ class RoomPage extends Component {
   }
 
   getPage(roomState) {
-    switch (this.state.roomState) {
+    // switch (this.state.roomState) {
+    switch('Nominate') {
       case 'Nominate':
-        return this.renderSelectRestaurant();
+        return <RestaurantPage />;
       case 'Vote':
         return <VotePage/>;
       case 'Order':
