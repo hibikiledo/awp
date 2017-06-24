@@ -23,20 +23,20 @@ export default combineReducers({
             let max = 0
             let top = null
             _.each(restaurants, (r) => {
-                if (!r.votes) {
+                if (!r || !r.votes) {
                     return
                 }
-                let score = 0
-                if (_.isArray(r.votes)) {
-                    score = r.votes.length
-                } else if (_.isNumber(r.votes)) {
-                    score = r.votes
-                }
+                let score = _.sum(_.values(r.votes))
                 if (score > max) {
                     max = score
                     top = r
                 }
             })
+            if (!top) {
+                return top
+            }
+            
+            top.voterNames = _.keys(top.votes)
             return top
         }
     }, null),
