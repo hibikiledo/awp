@@ -11,6 +11,7 @@ import PrimaryBtn from '../../components/PrimaryBtn'
 import PropTypes from 'prop-types'
 import TextInput from '../../components/TextInput'
 import { bindActionCreators } from 'redux'
+import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import { connect } from 'react-redux'
 
 class LandingPage extends Component {
@@ -34,6 +35,8 @@ class LandingPage extends Component {
         >
           JOIN
         </PrimaryBtn>
+        <Link to='/create'>Create new room</Link>
+        <RestaurantSearchBox onSelect={console.log}/>
       </div>
     );
   }

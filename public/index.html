@@ -40,6 +40,22 @@
       firebase.initializeApp(config);
     </script>
     <div id="root"></div>
+    <div id="map" style="display:none"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBCNZzqHHJyaWFVmHPISaTO1E76y2DE8c&libraries=geometry,places"></script>
+    <script>
+      var map;
+
+      function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -34.397, lng: 150.644},
+          zoom: 8
+        });
+
+        placesService = new google.maps.places.PlacesService(map);
+      }
+
+      initMap();
+    </script>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.
