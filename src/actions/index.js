@@ -156,10 +156,14 @@ export const VotePageActions = {
 
 export const RestaurantPageActions = {
   addRestaurant: (roomId, name, nominator, imageUrl) => (dispatch, getState, firebase) => {
+    if (!name) {
+      return dispatch(AppActions.addToast("Restaurant name cannot be empty."))
+    }
     firebase
       .database()
       .ref(`room/${roomId}/restaurants`)
       .push({ name, nominator, imageUrl })
+      .then(() => dispatch(RestaurantPageActions.closeRestaurantSearchBox()))
   },
   openRestaurantSearchBox: createAction('OPEN_RESTAURANT_SEARCH_BOX'),
   closeRestaurantSearchBox: createAction('CLOSE_RESTAURANT_SEARCH_BOX')
