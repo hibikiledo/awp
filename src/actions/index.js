@@ -17,12 +17,18 @@ export const ChatActions = {
       dispatch(createAction('CHAT_MESSAGES')(s.val()))
     })
   },
+  disconnectChat: () => {
+    if (currentChatRoomRef !== null) {
+      currentChatRoomRef.off()
+    }
+    currentChatRoomRef = null
+  },
   sendMessage: (message, name) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
       return;
     }
     currentChatRoomRef.push({
-      payload,
+      payload: message,
       name,
       type: "text"
     })
