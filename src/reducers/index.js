@@ -47,7 +47,7 @@ export default combineReducers({
                 return prevMenus
             }
 
-            return _.map(menus, (m) => {
+            const mappedResult = _.map(menus, (m) => {
                 const users = m.users || {}
                 const groupedUsers = _.groupBy(_.values(users), (u) => u)
                 const countedByName = _.map(groupedUsers, (arr, id) => {
@@ -63,6 +63,8 @@ export default combineReducers({
                     total: _.sumBy(countedByName, 'amount')
                 }
             })
+
+            return _.filter(mappedResult, (menu) => _.get(menu, 'total', 0))
         }
     }, []),
     toasts: handleActions({
