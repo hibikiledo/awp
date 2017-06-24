@@ -180,16 +180,29 @@ export const OrderPageActions = {
       return;
     }
 
-    let menuRef = menusRef.child(_.first(_.keys(iseq.val())));
+    const firstKey = _.first(_.keys(iseq.val()));
+    let menuRef = menusRef.child(firstKey);
 
-    menuRef.once('value', (menu) => {
-      const menuValue = menu.val();
-      const currentAmount = _.countBy(_.values(menuValue.users))[me] || 0;
+    menuRef.once('value', (m) => {
+      const menuValue = m.val();
+      const menuAmounts = _.countBy(_.values(menuValue.users));
+      const myCurrentAmount = menuAmounts[me] || 0;
+      const totalAmount = _.sum(_.values(menuAmounts));
       const myKeys = _.keys(_.pickBy(menuValue.users, _.partial(_.isEqual, me)));
-      const diff = currentAmount - updatedAmount;
+      const diff = myCurrentAmount - updatedAmount;
 
-      if (diff === 0) {
-        return;
+      if (totalAmount - diff <= 0) {
+        return menusRef
+          .child(firstKey)
+          .set(null)
+          .then(() => dispatch({
+            type: 'REMOVE_MENU',
+            payload: {
+              menuName: menu
+            }
+          }));
+      } else if (diff === 0) {
+        return
       } else if (diff > 0) {
         const diffKeys = myKeys.splice(0, diff);
         diffKeys.forEach(key => menuRef.child('users/' + key).set(null));
@@ -197,6 +210,7 @@ export const OrderPageActions = {
         const a = new Array(Math.abs(diff)).fill(1);
         a.forEach(() => menuRef.child('users').push(me));
       }
+      
     })
   }
 }
