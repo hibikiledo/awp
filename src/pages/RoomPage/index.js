@@ -65,9 +65,11 @@ class RoomPage extends Component {
       } else if (!room.lockMenu) {
         roomState = 'Order'
         remainingTime = null
+        clearInterval(this.timerId)
       } else if (room.lockMenu) {
         roomState = 'Summary'
         remainingTime = null
+        clearInterval(this.timerId)
       }
 
       this.setState({
