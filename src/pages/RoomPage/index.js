@@ -44,12 +44,8 @@ class RoomPage extends Component {
   }
 
   componentDidMount() {
-    this
-      .props
-      .subscribeRoom(this.props.match.params.id)
-    this
-      .props
-      .joinOrCreateChatRoom(this.props.match.params.id)
+    this.props.subscribeRoom(this.props.match.params.id)
+    // this.props.joinOrCreateChatRoom(this.props.match.params.id)
 
     this.timerId = setInterval(() => {
       const {room} = this.props

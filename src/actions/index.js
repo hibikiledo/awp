@@ -39,10 +39,7 @@ export const ChatActions = {
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
-      if (!s.val()) {
-        return;
-      }
-      dispatch(createAction('CHAT_MESSAGES')(s.val()))
+      dispatch(createAction('CHAT_MESSAGES')(s.val() || []))
     })
   },
   disconnectChat: () => (dispatch, getState) => {
@@ -60,6 +57,9 @@ export const ChatActions = {
       name,
       type: "text"
     })
+  },
+  showChatDialog: () => (dispatch, getState, firebase) => {
+
   }
 }
 
@@ -138,7 +138,10 @@ export const RoomPageActions = {
       .database()
       .ref(`room/${roomId}/users`)
       .push(name)
-      .then(() => dispatch(AppActions.setMe(name)))
+      .then(() => {
+        dispatch(AppActions.setMe(name))
+        dispatch(ChatActions.joinOrCreateChatRoom(roomId))
+      })
   }
 }
 

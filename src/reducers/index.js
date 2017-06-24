@@ -73,7 +73,7 @@ const appReducer = combineReducers({
     }, []),
     chat: handleActions({
         CHAT_MESSAGES: (chat, action) => action.payload
-    }, []),
+    }, null),
     me: handleActions({
         SET_ME: (me, action) => action.payload
     }, null),

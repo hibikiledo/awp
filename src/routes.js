@@ -8,7 +8,8 @@ import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { AppActions } from './actions'
+import { AppActions, ChatActions } from './actions'
+import ChatContainer from './components/ChatContainer'
 
 function Toast({ toasts }) {
     return (
@@ -40,6 +41,11 @@ const ConnectedToast = connect(({ toasts }) => ({
     toasts
 }))(Toast)
 
+const ConnectedChatContainer = connect(
+    ({chat}) => ({chat}),
+    (dispatch) => bindActionCreators(ChatActions, dispatch)
+)(ChatContainer)
+
 
 const AppNavBar = connect(
     ({ roomPin }) => ({ showCopy: roomPin, title: 'WeEat ❤︎' }),
@@ -59,6 +65,7 @@ export default class AppRoute extends React.Component {
                 <Route path="/" render={() => (
                     <ConnectedToast />
                 )} />
+                <Route path="/" component={ConnectedChatContainer} />
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/create" component={CreateRoomPage} />
                 <Route exact path="/r/:id" component={RoomPage} />
