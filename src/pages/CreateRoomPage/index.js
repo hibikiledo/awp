@@ -36,7 +36,8 @@ class CreateRoomPage extends Component {
   createRoom = async () => {
     const roomCfg = {
       name: this.state.roomName,
-      nominateTime: this.state.nominateTime
+      nominateTime: this.state.nominateTime,
+      startTime: new Date().getTime()
     }
     let roomId = await generateRoomID()
     console.log("ROOM ID:", roomId)
