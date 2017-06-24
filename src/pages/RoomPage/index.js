@@ -3,6 +3,12 @@ import React, {Component} from 'react';
 
 import OrderPage from './pages/OrderPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
+import TextInput from '../../components/TextInput';
+import PrimaryBtn from '../../components/PrimaryBtn';
+import RoomPin from '../../components/RoomPin';
+import PageContainer from '../../components/PageContainer'
+import FormSection from '../../components/FormSection'
+import FormGroup from '../../components/FormGroup'
 import {RoomPageConnect} from './helper'
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
@@ -109,18 +115,24 @@ class RoomPage extends Component {
 
   renderSetName = () => {
     return (
-      <div>
-        <h1>Enter your name</h1>
-        <input type="text" ref="name"/>
-        <button
-          onClick={() => {
-          this
-            .props
-            .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
-        }}>
-          Join
-        </button>
-      </div>
+      <PageContainer>
+        <FormSection>
+          <RoomPin pin={this.props.match.params.id} style={{
+            marginBottom: '50px'
+          }} />
+          <FormGroup>
+            <input type="text" className="text-input" placeholder="Enter your name" ref="name"/>
+          </FormGroup>
+          <PrimaryBtn
+            onClick={() => {
+            this
+              .props
+              .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
+          }}>
+            Join
+          </PrimaryBtn>
+        </FormSection>
+      </PageContainer>
     )
   }
 

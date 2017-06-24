@@ -1,0 +1,8 @@
+.page-section {
+  display: block;
+  align-items: center;
+  flex-flow: column;
+  width: 100%;
+  padding: 0 40px;
+  box-sizing: border-box;
+}

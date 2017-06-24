@@ -3,6 +3,10 @@ import './style.css'
 import React, { Component } from 'react';
 
 import AppLogo from '../../components/AppLogo'
+import PageContainer from '../../components/PageContainer'
+import PageSection from '../../components/PageSection'
+import FormSection from '../../components/FormSection'
+import FormGroup from '../../components/FormGroup'
 import { AppSelectors } from '../../selectors'
 import BorderlessBtn from '../../components/BorderlessBtn'
 import { LandingPageActions } from '../../actions'
@@ -43,31 +47,39 @@ class LandingPage extends Component {
 
   renderRequestPin() {
     return (
-      <div className="landing-page">
-        <div className="center">
-          <div className="app-logo"><AppLogo /></div>
-          <div className="request-pin-form">
+      <PageContainer>
+        <PageSection flex="1" />
+        <PageSection  style={{
+          marginBottom: '55px'
+        }}>
+          <AppLogo/>
+        </PageSection>
+        <FormSection>
+          <FormGroup>
             <TextInput
               placeholder="Room PIN"
               value={this.state.pin}
               onChange={(e) => {
               this.setState({ pin: e.target.value })
             }} />
-            <PrimaryBtn onClick={() => {
-              this.props.tryJoinRoomWithPin(this.state.pin)
-            }}>
-              JOIN
-            </PrimaryBtn>
-          </div>
-        </div>
-        <div className="footer">
+          </FormGroup>
+          <PrimaryBtn onClick={() => {
+            this.props.tryJoinRoomWithPin(this.state.pin)
+          }}>
+            JOIN
+          </PrimaryBtn>
+        </FormSection>
+        <PageSection flex="1" />
+        <PageSection>
           <BorderlessBtn onClick={() => {
             this.props.navigateToCreateRoomPage()
+          }} style={{
+            fontSize: '20px'
           }}>
             Create Room
           </BorderlessBtn>
-        </div>
-      </div>
+        </PageSection>
+      </PageContainer>
     );
   }
 
