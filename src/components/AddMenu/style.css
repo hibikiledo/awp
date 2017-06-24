@@ -1,0 +1,34 @@
+.add-menu {
+  height: 68px;
+  padding: 20px 40px 0px 40px;
+  border-bottom: solid 1px #e0e0e0;
+}
+
+.add-menu > .menu-input {
+  float: left;
+  width: 80%;
+  box-sizing: border-box;
+  line-height: 32px;
+  font-family: Roboto, Arial;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
+  text-align: left;
+  color: #000000;
+  border: none;
+  border-bottom: solid 1px #979797;
+  outline: none;
+}
+
+.add-menu > .add-btn {
+  width: 20%;
+  float: right;
+  text-align: center;
+  line-height: 32px;
+  font-family: Roboto, Arial;
+  font-size: 15px;
+}
+
+.add-menu > .menu-input::placeholder {
+  color: #000000;
+}
