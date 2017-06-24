@@ -16,10 +16,10 @@ function VotePage({room, match, voteForRestaurant}) {
     <div>
       {_
         .keys(room.restaurants)
-        .map((key) => {
+        .map((key, idx) => {
           const restaurant = room.restaurants[key];
           return (
-            <div onClick={() => voteForRestaurant(match.params.id, key)}>
+            <div key={idx} onClick={() => voteForRestaurant(match.params.id, key)}>
               <div>{restaurant.name}</div>
               <img src={restaurant.image}/>
               <div>{restaurant.votes}</div>

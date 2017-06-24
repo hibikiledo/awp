@@ -1,13 +1,17 @@
 import { ChatActions, RoomPageActions } from '../../actions'
 import React, { Component } from 'react';
 
+import OrderPage from './pages/OrderPage'
+import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import { RoomPageConnect } from './helper'
+import StatusBar from '../../components/StatusBar'
+import SummaryPage from './pages/SummaryPage'
 import VotePage from './pages/VotePage'
 import _ from 'lodash'
 import actionsFactory from './actions'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
-import RestaurantSearchBox from '../../components/RestaurantSearchBox';
+import moment from 'moment'
 
 const RestaurantCard = (r) => {
   if (!r) {
@@ -20,15 +24,58 @@ const RestaurantCard = (r) => {
   )
 }
 
+const states = ['Nominate', 'Vote', 'Order', 'Summary']
+
+const dateFormat = 'mm:ss'
+
 class RoomPage extends Component {
   constructor(props, ctx) {
     super(props, ctx)
-    this.state = null
+    this.state = {
+      roomState: null,
+      remainingTime: 0
+    }
   }
 
   componentDidMount() {
     this.props.subscribeRoom(this.props.match.params.id)
     this.props.joinOrCreateChatRoom(this.props.match.params.id)
+
+    this.timerId = setInterval(() => {
+      const { room } = this.props
+      if (!room) { return }
+
+      const start = room.startTime
+      const now = new Date().getTime()
+
+      const nominateTimeInMs = room.nominateTime * 60 * 1000
+      const endOfNominateTime = start + nominateTimeInMs
+
+      const voteTimeInMs = 1 * 60 * 1000
+      const endOfVoteTime = endOfNominateTime + voteTimeInMs
+
+      let roomState
+      let remainingTime
+      if (now < endOfNominateTime) {
+        roomState = 'Nominate'
+        remainingTime = moment(endOfNominateTime - now).format(dateFormat)
+      } else if (now < endOfVoteTime) {
+        roomState = 'Vote'
+        remainingTime = moment(endOfVoteTime - now).format(dateFormat)
+      } else if (!room.lockMenu) {
+        roomState = 'Order'
+        remainingTime = null
+      } else if (room.lockMenu) {
+        roomState = 'Summary'
+        remainingTime = null
+      }
+
+      this.setState({
+        roomState,
+        remainingTime
+      })
+    }, 1000);
+
     // setInterval(() => {
     //   if (!this.props.me) {
     //     console.log("No user")
@@ -40,6 +87,7 @@ class RoomPage extends Component {
 
   componentWillUnmount() {
     this.props.disconnectChat()
+    clearInterval(this.timerId)
   }
 
   renderSetName = () => {
@@ -80,15 +128,35 @@ class RoomPage extends Component {
     )
   }
 
+  renderPage() {
+
+  }
+
+  getPage(roomState) {
+    switch (this.state.roomState) {
+        case 'Nominate': return this.renderSelectRestaurant();
+        case 'Vote': return <VotePage />;
+        case 'Order': return <OrderPage />;
+        case 'Summary': return <SummaryPage />;
+      }
+  }
+
   render() {
     if (!this.props.me) {
       return this.renderSetName()
     } else if (this.props.me && this.props.room) {
-      return this.renderSelectRestaurant()
+      return (
+        <div>
+          <StatusBar
+            states={states}
+            currentState={this.state.roomState}
+            remainingTime={this.state.remainingTime} />
+          {this.getPage(this.state.roomState)}
+        </div>
+      )
     } else {
-      return null;
+      return null
     }
-    // return <VotePage />
   }
 }
 
