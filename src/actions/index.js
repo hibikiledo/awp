@@ -45,7 +45,7 @@ export const ChatActions = {
       dispatch(createAction('CHAT_MESSAGES')(s.val()))
     })
   },
-  disconnectChat: () => {
+  disconnectChat: () => (dispatch, getState) => {
     if (currentChatRoomRef !== null) {
       currentChatRoomRef.off()
     }
