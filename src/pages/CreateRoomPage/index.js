@@ -32,6 +32,21 @@ class CreateRoomPage extends Component {
       nominateTime: 5
     }
   }
+
+  createRoom = async () => {
+    const roomCfg = {
+      name: this.state.roomName,
+      nominateTime: this.state.nominateTime
+    }
+    let roomId = await generateRoomID()
+    console.log("ROOM ID:", roomId)
+    let newRoom = global.firebase.database()
+      .ref('room/' + roomId)
+      .set(roomCfg);
+    this.props.goToRoom(roomId)
+    console.log('create room in firebase')
+  }
+
   render() {
     return (
       <div>
@@ -45,19 +60,7 @@ class CreateRoomPage extends Component {
             control={< NumericInput onChange={(value) => this.setState({ nominateTime: value })} value={this.state.nominateTime} />} />
         </div>
         <PrimaryButton
-          onClick={async () => {
-            const roomCfg = {
-              name: this.state.roomName,
-              nominateTime: this.state.nominateTime
-            }
-            let roomId = await generateRoomID()
-            console.log("ROOM ID:", roomId)
-            let newRoom = global.firebase.database()
-              .ref('room/' + roomId)
-              .set(roomCfg);
-            this.props.goToRoom(roomId)
-            console.log('create room in firebase')
-          }}>CREATE</PrimaryButton>
+          onClick={this.createRoom}>CREATE</PrimaryButton>
       </div>
     );
   }
