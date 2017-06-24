@@ -1,6 +1,6 @@
+import _ from 'lodash'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
-import _ from 'lodash'
 
 let currentChatRoomRef = null
 
@@ -144,11 +144,13 @@ export const OrderPageActions = {
 }
 
 export const VotePageActions = {
-  voteForRestaurant: (roomId, restaurantId) => (dispatch, getState, firebase) => {
+  voteForRestaurant: (me, roomId, restaurantId) => (dispatch, getState, firebase) => {
     firebase
       .database()
-      .ref(`room/${roomId}/restaurants/${restaurantId}/votes`)
-      .transaction((currentVotes) => currentVotes + 1)
+      .ref(`room/${roomId}/restaurants/${restaurantId}/votes/${me}`)
+      .transaction((currentVotes) => {
+        return currentVotes === 1 ? currentVotes : currentVotes + 1
+      })
   }
 }
 

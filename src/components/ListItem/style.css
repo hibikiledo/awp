@@ -1,6 +1,6 @@
 .list-item {
   border-bottom: solid 1px #e0e0e0;
-  padding: 8px
+  padding: 8px;
 }
 
 .list-item > .pull-left {
@@ -20,7 +20,7 @@
 .list-item .title,
 .list-item .right-item {
     line-height: 18px;
-    font-family: Roboto;
+    font-family: Roboto, Arial;
     font-size: 15px;
     text-align: left;
     color: #242424;
@@ -33,9 +33,16 @@
 
 .list-item .description {
     line-height: 16px;
-    font-family: Roboto;
+    font-family: Roboto, Arial;
     font-size: 14px;
     text-align: left;
     color: #9a9a9a;
-    margin-bottom: 16px;
+}
+
+.list-item .title.highlight {
+	font-weight: bold;
+}
+
+.list-item .description.highlight {
+	color: #ff672b;
 }
