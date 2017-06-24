@@ -1,13 +1,14 @@
 import './style.css';
+import placeholdImage from './images/placeholder.jpg';
 import React from 'react';
 import PropTypes from 'prop-types';
 
 const SquareImage = ({ imageUrl }) => (
     <div className="square-image" style={{
-        background: `url(${imageUrl}) top center no-repeat`,
+        background: `url(${imageUrl || placeholdImage}) top center no-repeat`,
         backgroundSize: 'cover'
     }}>
-        <img src={imageUrl} />
+        <img src={imageUrl || placeholdImage} />
     </div>   
 )
 

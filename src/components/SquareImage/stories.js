@@ -9,5 +9,8 @@ storiesOf('<SquareImage />')
         <SquareImage 
             imageUrl="http://coolwildlife.com/wp-content/uploads/galleries/post-3004/Fox%20Picture%20003.jpg"
         />
+    ))
+    .add('with placeholder', () => (
+        <SquareImage />
     ));
     
