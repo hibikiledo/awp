@@ -48,7 +48,6 @@ class RoomPage extends Component {
 
     this.timerId = setInterval(() => {
       const {room} = this.props
-      console.log(room)
       if (!room) {
         return
       }
