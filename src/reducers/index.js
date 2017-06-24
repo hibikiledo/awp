@@ -14,7 +14,7 @@ export default combineReducers({
         DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
     }, []),
     chat: handleActions({
-        CHAT_MESSAGE: (chat, action) => action.payload
+        CHAT_MESSAGES: (chat, action) => action.payload
     }, []),
     me: handleActions({
         SET_ME: (me, action) => action.payload

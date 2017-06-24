@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
-import {RoomPageActions} from '../../actions'
-import {RoomPageConnect} from './helper'
+import { RoomPageActions, ChatActions } from '../../actions'
+import { RoomPageConnect } from './helper'
 import _ from 'lodash'
 import actionsFactory from './actions'
 import { bindActionCreators } from 'redux'
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 const RestaurantCard = (r) => {
   if (!r) {
@@ -24,17 +24,32 @@ class RoomPage extends Component {
     this.state = null
   }
 
+  componentDidMount() {
+    this.props.joinOrCreateChatRoom(this.props.match.params.id)
+    // setInterval(() => {
+    //   if (!this.props.me) {
+    //     console.log("No user")
+    //     return;
+    //   }
+    //   this.props.sendMessage("Hello " + new Date(), this.props.me)
+    // }, 1000)
+  }
+
+  componentWillUnmount() {
+    this.props.disconnectChat()
+  }
+
   renderSetName = () => {
     return (
       <div>
         <h1>Enter your name</h1>
-        <input type="text" ref="name"/>
+        <input type="text" ref="name" />
         <button
           onClick={() => {
-          this
-            .props
-            .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
-        }}>
+            this
+              .props
+              .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
+          }}>
           Join
         </button>
       </div>
@@ -53,8 +68,8 @@ class RoomPage extends Component {
         </div>
         <div>
           <h2>Members:</h2>
-          {_.values(this.props.room.users).map((name) => (
-            <div>{name}</div>
+          {_.values(this.props.room.users).map((name, idx) => (
+            <div key={idx}>{name}</div>
           ))}
         </div>
       </div>
@@ -74,5 +89,5 @@ class RoomPage extends Component {
 
 export default connect(
   ({ me, room }) => ({ me, room }),
-  (dispatch) => bindActionCreators(RoomPageActions, dispatch)
-)(RoomPage)
+  (dispatch) => bindActionCreators(_.extend({}, RoomPageActions, ChatActions), dispatch),
+  )(RoomPage)

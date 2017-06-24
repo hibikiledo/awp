@@ -14,6 +14,9 @@ export const ChatActions = {
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
+      if (!s.val()) {
+        return;
+      }
       dispatch(createAction('CHAT_MESSAGES')(s.val()))
     })
   },
@@ -27,7 +30,7 @@ export const ChatActions = {
     if (currentChatRoomRef == null) {
       return;
     }
-    currentChatRoomRef.push({
+    return currentChatRoomRef.push({
       payload: message,
       name,
       type: "text"
