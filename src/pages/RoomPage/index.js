@@ -1,16 +1,16 @@
-import { ChatActions, RoomPageActions } from '../../actions'
-import React, { Component } from 'react';
+import {ChatActions, RoomPageActions} from '../../actions'
+import React, {Component} from 'react';
 
 import OrderPage from './pages/OrderPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
-import { RoomPageConnect } from './helper'
+import {RoomPageConnect} from './helper'
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
 import VotePage from './pages/VotePage'
 import _ from 'lodash'
 import actionsFactory from './actions'
-import { bindActionCreators } from 'redux'
-import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux'
+import {connect} from 'react-redux';
 import moment from 'moment'
 
 const RestaurantCard = (r) => {
@@ -38,12 +38,19 @@ class RoomPage extends Component {
   }
 
   componentDidMount() {
-    this.props.subscribeRoom(this.props.match.params.id)
-    this.props.joinOrCreateChatRoom(this.props.match.params.id)
+    this
+      .props
+      .subscribeRoom(this.props.match.params.id)
+    this
+      .props
+      .joinOrCreateChatRoom(this.props.match.params.id)
 
     this.timerId = setInterval(() => {
-      const { room } = this.props
-      if (!room) { return }
+      const {room} = this.props
+      console.log(room)
+      if (!room) {
+        return
+      }
 
       const start = room.startTime
       const now = new Date().getTime()
@@ -62,33 +69,40 @@ class RoomPage extends Component {
       } else if (now < endOfVoteTime) {
         roomState = 'Vote'
         remainingTime = moment(endOfVoteTime - now).format(dateFormat)
-      } else if (!room.lockMenu) {
-        roomState = 'Order'
-        remainingTime = null
-        clearInterval(this.timerId)
-      } else if (room.lockMenu) {
-        roomState = 'Summary'
-        remainingTime = null
+      } else {
         clearInterval(this.timerId)
       }
 
-      this.setState({
-        roomState,
-        remainingTime
-      })
+      this.setState({roomState, remainingTime})
     }, 1000);
 
-    // setInterval(() => {
-    //   if (!this.props.me) {
-    //     console.log("No user")
-    //     return;
-    //   }
-    //   this.props.sendMessage("Hello " + new Date(), this.props.me)
-    // }, 1000)
+    // setInterval(() => {   if (!this.props.me) {     console.log("No user")
+    // return;   }   this.props.sendMessage("Hello " + new Date(), this.props.me) },
+    // 1000)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let roomState
+    let remainingTime
+    if (this.props.room && nextProps.room) {
+      if (!nextProps.room.lockMenu) {
+        roomState = 'Order'
+        remainingTime = null
+      } else {
+        roomState = 'Summary'
+        remainingTime = null
+      }
+    }
+    this.setState({
+      roomState,
+      remainingTime
+    })
   }
 
   componentWillUnmount() {
-    this.props.disconnectChat()
+    this
+      .props
+      .disconnectChat()
     clearInterval(this.timerId)
   }
 
@@ -96,13 +110,13 @@ class RoomPage extends Component {
     return (
       <div>
         <h1>Enter your name</h1>
-        <input type="text" ref="name" />
+        <input type="text" ref="name"/>
         <button
           onClick={() => {
-            this
-              .props
-              .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
-          }}>
+          this
+            .props
+            .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
+        }}>
           Join
         </button>
       </div>
@@ -122,25 +136,29 @@ class RoomPage extends Component {
         </div>
         <div>
           <h2>Members:</h2>
-          {_.values(this.props.room.users).map((name, idx) => (
-            <div key={idx}>{name}</div>
-          ))}
+          {_
+            .values(this.props.room.users)
+            .map((name, idx) => (
+              <div key={idx}>{name}</div>
+            ))}
         </div>
       </div>
     )
   }
 
-  renderPage() {
-
-  }
+  renderPage() {}
 
   getPage(roomState) {
     switch (this.state.roomState) {
-        case 'Nominate': return this.renderSelectRestaurant();
-        case 'Vote': return <VotePage />;
-        case 'Order': return <OrderPage />;
-        case 'Summary': return <SummaryPage />;
-      }
+      case 'Nominate':
+        return this.renderSelectRestaurant();
+      case 'Vote':
+        return <VotePage/>;
+      case 'Order':
+        return <OrderPage/>;
+      case 'Summary':
+        return <SummaryPage/>;
+    }
   }
 
   render() {
@@ -152,8 +170,7 @@ class RoomPage extends Component {
           <StatusBar
             states={states}
             currentState={this.state.roomState}
-            remainingTime={this.state.remainingTime} />
-          {this.getPage(this.state.roomState)}
+            remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
         </div>
       )
     } else {
@@ -162,7 +179,4 @@ class RoomPage extends Component {
   }
 }
 
-export default connect(
-  ({ me, room }) => ({ me, room }),
-  (dispatch) => bindActionCreators(_.extend({}, RoomPageActions, ChatActions), dispatch),
-  )(RoomPage)
+export default connect(({me, room}) => ({me, room}), (dispatch) => bindActionCreators(_.extend({}, RoomPageActions, ChatActions), dispatch),)(RoomPage)
