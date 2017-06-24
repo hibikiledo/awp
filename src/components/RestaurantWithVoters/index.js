@@ -35,6 +35,7 @@ const ActiveOverlay = () => (
 
 const RestaurantWithVoters = ({title, imageUrl, imageWidth, vote, active}) => {
     const coverWidth = 100 - imageWidth;
+    const safeImageWidth = Math.max(2, imageWidth)
     return (
         <div className="restarant-vote">
             <div className="pull-left">
@@ -56,13 +57,14 @@ const RestaurantWithVoters = ({title, imageUrl, imageWidth, vote, active}) => {
                 <div
                     className="white-box"
                     style={{
-                    width: `${coverWidth}%`
+                        width: `${coverWidth}%`
                 }} />
                 <div
                     className="black-box"
                     style={{
-                    position: 'relative',
-                    width: `${imageWidth}%`
+                        position: 'relative',
+                        width: `${safeImageWidth}%`,
+                        opacity: imageWidth === 0 ? 0.5 : 1
                 }}>
                 { active && <ActiveOverlay />}
                 </div>
