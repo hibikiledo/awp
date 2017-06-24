@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import { Link } from 'react-router-dom'
 import PrimaryBtn from '../../components/PrimaryBtn'
+import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 
@@ -18,6 +19,7 @@ class LandingPage extends Component {
           JOIN
         </PrimaryBtn>
         <Link to='/create'>Create new room</Link>
+        <RestaurantSearchBox onSelect={console.log}/>
       </div>
     );
   }
