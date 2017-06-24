@@ -151,3 +151,14 @@ export const VotePageActions = {
       .transaction((currentVotes) => currentVotes + 1)
   }
 }
+
+export const RestaurantPageActions = {
+  addRestaurant: (roomId, name, nominator, imageUrl) => (dispatch, getState, firebase) => {
+    firebase
+      .database()
+      .ref(`room/${roomId}/restaurants`)
+      .push({ name, nominator, imageUrl })
+  },
+  openRestaurantSearchBox: createAction('OPEN_RESTAURANT_SEARCH_BOX'),
+  closeRestaurantSearchBox: createAction('CLOSE_RESTAURANT_SEARCH_BOX')
+}

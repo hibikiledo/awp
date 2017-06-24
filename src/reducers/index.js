@@ -1,8 +1,8 @@
+import _ from 'lodash'
 import { combineReducers } from 'redux'
 import firebaseReducer from './firebaseReducer'
 import { handleActions } from 'redux-actions'
 import { routerReducer } from 'react-router-redux'
-import _ from 'lodash'
 
 export default combineReducers({
     firebase: firebaseReducer,
@@ -63,5 +63,9 @@ export default combineReducers({
     }, []),
     me: handleActions({
         SET_ME: (me, action) => action.payload
-    }, null)
+    }, null),
+    restaurantSearchBoxOpen: handleActions({
+        OPEN_RESTAURANT_SEARCH_BOX: (__, action) => true,
+        CLOSE_RESTAURANT_SEARCH_BOX: (__, action) => false,
+    }, false)
 })
