@@ -19,7 +19,7 @@ class SummaryPage extends Component {
   }
 
   render() {
-    const { menus } = this.props;
+    const { menus, topRestaurant } = this.props;
 
     const grandTotal = _.sumBy(menus, 'total');
     
@@ -29,11 +29,12 @@ class SummaryPage extends Component {
           <div className="restaurant-info full-width">
             <FormGroup>
               <RestaurantDisplayWithVoters
-                restaurantName="Ginzado Thonglorr"
+                restaurantName={topRestaurant.name}
+                imageUrl={topRestaurant.imageUrl}
                 voters={['Earth']}
               />
             </FormGroup>
-            <ChosenServicePerson person="Earth" />
+            <ChosenServicePerson person={topRestaurant.nominator} />
           </div>
         </FormGroup>
         {
@@ -49,6 +50,7 @@ class SummaryPage extends Component {
           title="Total"
           description="Items"
           rightItem={`x${grandTotal}`}
+          highlight={true}
         />
       </div>
     )
@@ -56,5 +58,5 @@ class SummaryPage extends Component {
 }
 
 export default connect(
-  ({ menus }) => ({ menus })
+  ({ menus, topRestaurant }) => ({ menus, topRestaurant })
 )(SummaryPage);
