@@ -12,5 +12,8 @@ export default combineReducers({
     toasts: handleActions({
         ADD_TOAST: (toasts, action) => [...toasts, action.payload],
         DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
-    }, [])
+    }, []),
+    me: handleActions({
+        SET_ME: (me, action) => action.payload
+    }, null)
 })

@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
-import { RoomPageConnect } from './helper'
+import {RoomPageActions} from '../../actions'
+import {RoomPageConnect} from './helper'
 import _ from 'lodash'
 import actionsFactory from './actions'
-import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import {connect} from 'react-redux';
 
 const RestaurantCard = (r) => {
   if (!r) {
@@ -23,59 +25,54 @@ class RoomPage extends Component {
   }
 
   renderSetName = () => {
-    const { setName } = this.props.actions
     return (
       <div>
         <h1>Enter your name</h1>
-        <input type="text" ref="name" />
-        <button onClick={() => { setName(this.refs.name.value) }}>Join</button>
+        <input type="text" ref="name"/>
+        <button
+          onClick={() => {
+          this
+            .props
+            .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
+        }}>
+          Join
+        </button>
       </div>
     )
   }
 
   renderSelectRestaurant = () => {
-    //room is ImmutableJS object
-    const { room } = this.props
-    const { updateRestaurantsNearby } = this.props.actions
-    console.log(room.toJS())
-
     return (
       <div>
         <h1>Room page</h1>
         <div>
-          <h2>Restaurants: <button onClick={() => updateRestaurantsNearby()}>Show nearby</button></h2>
-          {(room.get('restaurants') || []).map((r, idx) => {
-
-          })}
+          <h2>Restaurants:
+            <button >Show nearby</button>
+          </h2>
+          {/*{(room.get('restaurants') || []).map((r, idx) => {})}*/}
         </div>
         <div>
           <h2>Members:</h2>
-          {room.get('members').toArray().map((name, idx) => {
-            return <span key={idx}>{name} </span>
-          })}
+          {_.values(this.props.room.users).map((name) => (
+            <div>{name}</div>
+          ))}
         </div>
       </div>
     )
   }
 
   render() {
-    const { me } = this.props
-    if (!me) {
+    if (!this.props.me) {
       return this.renderSetName()
-    } else {
+    } else if (this.props.me && this.props.room) {
       return this.renderSelectRestaurant()
+    } else {
+      return null;
     }
   }
 }
 
-const mapState = (state, { match }) => {
-  return {
-    roomId: match.params.id
-  }
-};
-
-export default connect(mapState)(
-  RoomPageConnect(
-    ({ roomId }) => roomId,
-    actionsFactory)(RoomPage)
-)
+export default connect(
+  ({ me, room }) => ({ me, room }),
+  (dispatch) => bindActionCreators(RoomPageActions, dispatch)
+)(RoomPage)
