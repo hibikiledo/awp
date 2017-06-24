@@ -17,33 +17,24 @@ class RestaurantSearchInput extends Component {
   static propTypes = {
     onSelect: PropTypes.func.isRequired
   }
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null
-    };
-  }
-  onChange = (e) => {
-    const value = e.target.value;
-
-    this.setState({value});
-
+  onSelect = () => {
     this
       .props
-      .onChange(value);
+      .onSelect({name: this.input.value, imageUrl: null});
   }
   render() {
-    const {onChange, onSelect} = this.props;
-
     return (
       <div className="search-input">
         <div className="icon">
           <img src={searchIcon}/>
         </div>
-        <TextInput onChange={this.onChange}/>
-        <span
-          className="button"
-          onClick={() => onSelect({name: this.state.value, imageUrl: null})}>+</span>
+        <input
+          type="text"
+          className="text-input"
+          value={this.props.keyword}
+          onChange={(e) => this.props.onChange(e.target.value)}
+          ref={input => this.input = input}/>
+        <span className="button" onClick={this.onSelect}>+</span>
         <div className="clear"></div>
       </div>
     )
@@ -52,7 +43,6 @@ class RestaurantSearchInput extends Component {
 
 class RestaurantSearchAPI {
   searchByKeyword(keyword) {
-
     return new Promise((resolve, reject) => {
       window
         .placesService
@@ -60,26 +50,30 @@ class RestaurantSearchAPI {
           query: keyword,
           type: 'restaurant'
         }, resolve)
-    }).then(result => result.map(p => this.googlePlaceToRestaurant(p)));
+    }).then(result => result ? result.map(p => this.googlePlaceToRestaurant(p)) : []);
   }
   googlePlaceToRestaurant(place) {
-    const imageUrl = place.photos.length > 0
+    const imageUrl = place.photos && place.photos.length > 0
       ? place
         .photos[0]
         .getUrl({maxWidth: '400px'})
+        .replace(/(.+)\//, '$1')
       : null;
 
     return {
       name: place.name,
-      imageUrl: imageUrl.replace(/(.+)\//, '$1')
+      imageUrl: imageUrl
     };
   }
 }
 
-export const RestaurantSearchBox = ({onSelect, onChange, restaurants}) => (
+export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants}) => (
   <div>
     <div>
-      <RestaurantSearchInput onChange={onChange} onSelect={onSelect} />
+      <RestaurantSearchInput
+        keyword={keyword}
+        onChange={onChange}
+        onSelect={onSelect}/>
     </div>
     <div>
       {restaurants.map((r, i) => <RestaurantSearchListItem
@@ -98,21 +92,45 @@ export default class RestaurantSearchBoxContainer extends Component {
     super(props);
     this.api = new RestaurantSearchAPI();
     this.state = {
+      keyword: '',
       restaurants: []
     };
+    this.searchRestaurant = debounce(this.searchRestaurant.bind(this));
   }
-  onChange = debounce((keyword) => {
+  searchRestaurant(keyword) {
     this
       .api
       .searchByKeyword(keyword)
       .then(restuarants => this.setState({
         restaurants: restuarants || []
       }))
-  }, 400)
+  }
+  onChange = (keyword) => {
+    if (!keyword) {
+      return this.setState({
+        keyword,
+        restaurants: []
+      })
+    }
+
+    this.setState({
+      keyword
+    });
+
+    this.searchRestaurant(keyword);
+  }
+  onSelect = (r) => {
+    this.setState({
+      keyword: '',
+      restaurants: []
+    });
+    this.props.onSelect(r);
+  }
   render() {
     return (<RestaurantSearchBox
+      keyword={this.state.keyword}
       onChange={this.onChange}
-      onSelect={this.props.onSelect}
+      onSelect={this.onSelect}
       restaurants={this.state.restaurants}/>);
   }
 };
