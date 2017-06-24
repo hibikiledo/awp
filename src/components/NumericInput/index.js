@@ -6,8 +6,14 @@ import PropTypes from 'prop-types';
 
 export default class TextInput extends Component {
   static propTypes = {
+    min: PropTypes.number,
+    max: PropTypes.number,
     value: PropTypes.number,
     onChange: PropTypes.func.isRequired
+  }
+  static defaultProps = {
+    min: 0,
+    max: 100
   }
   constructor(props) {
     super(props);
@@ -18,11 +24,19 @@ export default class TextInput extends Component {
     this.decrease = this.decrease.bind(this);
   }
   increase() {
+    if (this.state.value >= this.props.max) {
+      return;
+    }
+
     this.setState({
       value: this.state.value + 1
     });
   }
   decrease() {
+    if (this.state.value <= this.props.min) {
+      return;
+    }
+
     this.setState({
       value: this.state.value - 1
     });
