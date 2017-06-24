@@ -1,0 +1,36 @@
+.chatContainer {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+}
+.chatContainer.expanded {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: rgba(1,1,1,0.6)
+}
+
+.chatWrapper {
+  position: absolute;
+  left: 0;
+  right: 30px;
+  top: 0;
+  bottom: 0;
+  background: #fff;
+}
+
+.chatContainer .chat-btn {
+  position: absolute;
+  bottom: 10px;
+  left: 10px
+}
+
+.chatContainer .container {
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+}

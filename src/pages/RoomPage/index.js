@@ -9,14 +9,12 @@ import PageContainer from '../../components/PageContainer'
 import PrimaryBtn from '../../components/PrimaryBtn';
 import RestaurantPage from './pages/RestaurantPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
-import {RoomPageConnect} from './helper'
 import RoomPin from '../../components/RoomPin';
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
 import TextInput from '../../components/TextInput';
 import VotePage from './pages/VotePage'
 import _ from 'lodash'
-import actionsFactory from './actions'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
 import moment from 'moment'
@@ -46,12 +44,7 @@ class RoomPage extends Component {
   }
 
   componentDidMount() {
-    this
-      .props
-      .subscribeRoom(this.props.match.params.id)
-    this
-      .props
-      .joinOrCreateChatRoom(this.props.match.params.id)
+    this.props.subscribeRoom(this.props.match.params.id)
 
     this.timerId = setInterval(() => {
       const {room} = this.props
@@ -62,10 +55,6 @@ class RoomPage extends Component {
       const { roomState, remainingTime } = this.getRoomState(room)
       this.setState({roomState, remainingTime})
     }, 1000);
-
-    // setInterval(() => {   if (!this.props.me) {     console.log("No user")
-    // return;   }   this.props.sendMessage("Hello " + new Date(), this.props.me) },
-    // 1000)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -79,9 +68,7 @@ class RoomPage extends Component {
   }
 
   componentWillUnmount() {
-    this
-      .props
-      .disconnectChat()
+    this.props.disconnectChat()
     clearInterval(this.timerId)
   }
 
@@ -160,6 +147,7 @@ class RoomPage extends Component {
 
   getPage(roomState) {
     switch (this.state.roomState) {
+    // switch('Order') {
       case 'Nominate':
         return <RestaurantPage />;
       case 'Vote':

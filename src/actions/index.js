@@ -1,9 +1,13 @@
 import _ from 'lodash'
+import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
-import copyClipbaord from './clipboard'
 
 let currentChatRoomRef = null
+
+function isBlank(s) {
+  return _.isString(s) ? !_.trim(s) : _.isEmpty(s)
+}
 
 function requestPush(cb) {
   if (Notification.permission === "granted") {
@@ -35,31 +39,42 @@ export const ChatActions = {
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
-      if (!s.val()) {
-        return;
-      }
-      dispatch(createAction('CHAT_MESSAGES')(s.val()))
+      dispatch(createAction('CHAT_MESSAGES')(s.val() || []))
     })
   },
-  disconnectChat: () => {
+  disconnectChat: () => (dispatch, getState) => {
     if (currentChatRoomRef !== null) {
       currentChatRoomRef.off()
     }
     currentChatRoomRef = null
   },
-  sendMessage: (message, name) => (dispatch, getState, firebase) => {
+  sendMessage: (message) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
+      return;
+    }
+    const state = getState()
+    if (isBlank(state.me)) {
       return;
     }
     return currentChatRoomRef.push({
       payload: message,
-      name,
+      name: state.me,
       type: "text"
     })
+  },
+  showChatDialog: () => (dispatch, getState, firebase) => {
+    dispatch(createAction("OPEN_CHAT_DIALOG")())
+  },
+  closeChatDialog: () => (dispatch, getState, firebase) => {
+    dispatch(createAction("CLOSE_CHAT_DIALOG")())
   }
 }
 
 export const AppActions = {
+  resetApp: () => (dispatch, getState, firebase) => {
+    dispatch(createAction('RESET_APP')())
+    dispatch(push('/'))
+  },
   setRoom: createAction('SET_ROOM'),
   setRoomPin: createAction('SET_ROOM_PIN'),
   addToast: (msg) => (dispatch, getState) => {
@@ -69,7 +84,6 @@ export const AppActions = {
   setMe: createAction('SET_ME'),
   copyLink: () => (dispatch, getState) => {
     const roomPin = getState().roomPin
-    console.log("Copying url with pin:", roomPin, msg)
     if (!roomPin) {
       return;
     }
@@ -80,6 +94,9 @@ export const AppActions = {
 
 export const LandingPageActions = {
   tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
+    if (isBlank(pin)) {
+      return dispatch(AppActions.addToast("Pin cannot empty"))
+    }
     firebase
       .database()
       .ref(`room/${pin}`)
@@ -120,29 +137,36 @@ export const RoomPageActions = {
       })
   },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
+    if (isBlank(name)) {
+      return dispatch(AppActions.addToast("Name cannot be blank"))
+    }
+    name = _.trim(name)
     firebase
       .database()
       .ref(`room/${roomId}/users`)
       .push(name)
-      .then(() => dispatch(AppActions.setMe(name)))
+      .then(() => {
+        dispatch(AppActions.setMe(name))
+        dispatch(ChatActions.joinOrCreateChatRoom(roomId))
+      })
   }
 }
 
 export const OrderPageActions = {
   addMenu: (menu) => async (dispatch, getState, firebase) => {
     const pin = getState().roomPin
-    if (_.isEmpty(pin)) {
+    if (isBlank(pin)) {
       console.error("Room pin is missing, cannot add menu");
       return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
     }
 
     const me = getState().me
-    if (_.isEmpty(me)) {
+    if (isBlank(me)) {
       console.error("Error: current user missing");
       return dispatch(push('/'))
     }
 
-    if (_.isEmpty(menu)) {
+    if (isBlank(menu)) {
       return dispatch(AppActions.addToast("Menu name should not be blank"))
     }
 
@@ -158,18 +182,18 @@ export const OrderPageActions = {
   },
   updateMenu: (menu, updatedAmount) => async (dispatch, getState, firebase) => {
     const pin = getState().roomPin
-    if (_.isEmpty(pin)) {
+    if (isBlank(pin)) {
       console.error("Room pin is missing, cannot add menu");
       return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
     }
 
     const me = getState().me
-    if (_.isEmpty(me)) {
+    if (isBlank(me)) {
       console.error("Error: current user missing");
       return dispatch(push('/'))
     }
 
-    if (_.isEmpty(menu)) {
+    if (isBlank(menu)) {
       return dispatch(AppActions.addToast("Menu name should not be blank"))
     }
 
@@ -212,6 +236,18 @@ export const OrderPageActions = {
       }
       
     })
+  },
+  endOrder: () => (dispatch, getState, firebase) => {
+    const { roomPin, topRestaurant } = getState()
+    const users = _.keys(topRestaurant.votes)
+    const unluckyUser = users[_.random(0, users.length)]
+    firebase
+      .database()
+      .ref(`room/${roomPin}/lockMenu`)
+      .set(true)
+      .then(() => {
+        firebase.database().ref(`room/${roomPin}/unluckyUser`).set(unluckyUser)
+      })
   }
 }
 
