@@ -32,7 +32,7 @@ class SummaryPage extends Component {
               <RestaurantDisplayWithVoters
                 restaurantName={topRestaurant.name}
                 imageUrl={topRestaurant.imageUrl}
-                voters={['Earth']}
+                voters={restaurant.voterNames}
               />
             </FormGroup>
             <ChosenServicePerson person={room.unluckyUser} />
