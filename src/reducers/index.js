@@ -8,5 +8,9 @@ export default combineReducers({
     router: routerReducer,
     room: handleActions({
         SET_ROOM: (room, action) => action.payload
-    }, null)
+    }, null),
+    toasts: handleActions({
+        ADD_TOAST: (toasts, action) => [...toasts, action.payload],
+        DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
+    }, [])
 })

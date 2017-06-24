@@ -1,4 +1,11 @@
-.request-pin-form {
+.landing-page > .request-pin-form {
   width: 70%;
   margin: auto;
+}
+
+.landing-page > .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }

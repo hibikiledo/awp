@@ -17,6 +17,10 @@ class LandingPage extends Component {
     room: PropTypes.object
   }
 
+  state = {
+    pin: ''
+  }
+
   renderRequestName() {
     return (
       <div className="App">
@@ -37,9 +41,13 @@ class LandingPage extends Component {
     return (
       <div className="landing-page">
         <div className="request-pin-form">
-          <TextInput />
+          <TextInput
+            value={this.state.pin}
+            onChange={(e) => {
+            this.setState({ pin: e.target.value })
+          }} />
           <PrimaryBtn onClick={() => {
-            this.props.tryJoinRoomWithPin(123)
+            this.props.tryJoinRoomWithPin(this.state.pin)
           }}>
             JOIN
           </PrimaryBtn>
@@ -56,9 +64,13 @@ class LandingPage extends Component {
   }
 
   render() {
-    return this.props.room && !this.props.room.joined
-      ? this.renderRequestName()
-      : this.renderRequestPin();
+    return (
+      <div>
+        { this.props.room && !this.props.room.joined
+          ? this.renderRequestName()
+          : this.renderRequestPin() }
+      </div>
+    )
   }
 }
 

@@ -15,10 +15,6 @@ import thunk from 'redux-thunk';
 const history = createHistory()
 const middleware = routerMiddleware(history)
 
-// const firebaseApi = {
-
-// }
-
 const store = createStore(
   reducers,
   composeWithDevTools(applyMiddleware(middleware, thunk.withExtraArgument(global.firebase)))
