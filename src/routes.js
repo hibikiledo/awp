@@ -1,5 +1,8 @@
+import './styles/global.css'
+
 import CreateRoomPage from './pages/CreateRoomPage'
 import LandingPage from './pages/LandingPage';
+import NavBar from './components/NavBar';
 import React from 'react';
 import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
@@ -37,6 +40,9 @@ export default class AppRoute extends React.Component {
     render() {
         return (
             <div>
+                <nav className="full-width">
+                    <NavBar title="WeEat ❤︎" />
+                </nav>
                 <Route path="/" render={() => (
                   <ConnectedToast />
                 )} />
