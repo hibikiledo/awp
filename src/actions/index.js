@@ -80,6 +80,9 @@ export const AppActions = {
 
 export const LandingPageActions = {
   tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
+    if (_.isEmpty(pin)) {
+      return dispatch(AppActions.addToast("Pin cannot empty"))
+    }
     firebase
       .database()
       .ref(`room/${pin}`)
