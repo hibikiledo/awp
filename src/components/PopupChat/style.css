@@ -1,0 +1,25 @@
+.triangle-down{
+	border-top: 15px solid #e21a00;
+	border-right: 15px solid transparent;
+	width: 0px;
+	height: 0px;
+}
+
+.my-message {
+	padding-top: 10px;
+  width: fit-content;
+  border-radius: 4px 4px 4px 0px;
+  background-color: #e21a00;
+  padding: 8px 20px 8px 20px;
+  font-family: Roboto,Arial;
+  font-size: 16px;
+  text-align: right;
+  color: #ffffff;
+}
+
+.display-name {
+  font-family: Thonburi,Arial;
+  font-size: 14px;
+  text-align: left;
+  color: #424242;
+}
