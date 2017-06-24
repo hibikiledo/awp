@@ -45,7 +45,6 @@ class RoomPage extends Component {
 
   componentDidMount() {
     this.props.subscribeRoom(this.props.match.params.id)
-    // this.props.joinOrCreateChatRoom(this.props.match.params.id)
 
     this.timerId = setInterval(() => {
       const {room} = this.props
@@ -56,10 +55,6 @@ class RoomPage extends Component {
       const { roomState, remainingTime } = this.getRoomState(room)
       this.setState({roomState, remainingTime})
     }, 1000);
-
-    // setInterval(() => {   if (!this.props.me) {     console.log("No user")
-    // return;   }   this.props.sendMessage("Hello " + new Date(), this.props.me) },
-    // 1000)
   }
 
   componentWillReceiveProps(nextProps) {
