@@ -73,7 +73,6 @@ export const AppActions = {
   setMe: createAction('SET_ME'),
   copyLink: () => (dispatch, getState) => {
     const roomPin = getState().roomPin
-    console.log("Copying url with pin:", roomPin, msg)
     if (!roomPin) {
       return;
     }
