@@ -1,0 +1,32 @@
+.restaurant-display {
+
+}
+
+.restaurant-display > .image {
+	width: 72px;
+	float: left;
+}
+
+.restaurant-display > .text {
+	width: calc(100% - 72px);
+	float: left;
+	padding: 0 8px;
+	box-sizing: border-box;
+}
+
+.restaurant-display > .text > h4 {
+	line-height: 24px;
+	font-family: Roboto, Arial;
+	font-size: 20px;
+	color: #1f1f1f;
+	margin: 0;
+	margin-bottom: 4px;
+}
+
+.restaurant-display > .text > div {
+	font-family: Roboto, Arial;
+	font-size: 14px;
+	line-height: 16px;
+	color: #1f1f1f;
+	margin: 0;
+}
