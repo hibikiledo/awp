@@ -41,6 +41,7 @@ class LandingPage extends Component {
             <TextInput
               placeholder="Room PIN"
               value={this.state.pin}
+              type="number"
               onChange={(e) => {
               this.setState({ pin: e.target.value })
             }} />
