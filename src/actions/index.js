@@ -1,7 +1,7 @@
 import _ from 'lodash'
+import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
-import copyClipbaord from './clipboard'
 
 let currentChatRoomRef = null
 
@@ -198,6 +198,13 @@ export const OrderPageActions = {
         a.forEach(() => menuRef.child('users').push(me));
       }
     })
+  },
+  endOrder: () => (dispatch, getState, firebase) => {
+    const { roomPin } = getState()
+    firebase
+      .database()
+      .ref(`room/${roomPin}/lockMenu`)
+      .set(true)
   }
 }
 
