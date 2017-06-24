@@ -34,49 +34,38 @@ const ActiveOverlay = () => (
 )
 
 const RestaurantWithVoters = ({title, imageUrl, imageWidth, vote, active}) => {
-    var coverWidth = 100 - imageWidth;
-    var rightItem;
-    if (vote > 1) {
-        rightItem = (
-            <div className="right-item">{vote}
-                votes</div>
-        );
-    } else {
-        rightItem = (
-            <div className="right-item">{vote}
-                vote</div>
-        );
-    }
-
+    const coverWidth = 100 - imageWidth;
     return (
         <div className="restarant-vote">
             <div className="pull-left">
                 <div className="title">{title}</div>
             </div>
             <div className="pull-right">
-                {rightItem}
+                <div className="right-item">
+                    {`${vote} ${vote > 1 ? 'Votes' : 'Vote'}`}
+                </div>
             </div>
             <div className="clear"></div>
             <div
                 className="image"
                 style={{
-                background: `url(${imageUrl}) center no-repeat`,
-                backgroundSize: 'cover'
-            }}>
+                    background: `url(${imageUrl}) center no-repeat`,
+                    backgroundSize: 'cover'
+                }}
+            >
                 <div
                     className="white-box"
                     style={{
                     width: `${coverWidth}%`
-                }}></div>
+                }} />
                 <div
                     className="black-box"
                     style={{
                     position: 'relative',
                     width: `${imageWidth}%`
                 }}>
-                    { active && <ActiveOverlay/> }
+                { active && <ActiveOverlay />}
                 </div>
-
             </div>
         </div>
     );
