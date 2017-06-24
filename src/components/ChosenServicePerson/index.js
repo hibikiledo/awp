@@ -1,5 +1,8 @@
-import React from 'react';
 import './style.css';
+
+import React from 'react';
+import _ from 'lodash';
+import { connect } from 'react-redux'
 
 const ChosenServicePerson = ({person}) => (
     <div className="chosen-person">
@@ -8,4 +11,6 @@ const ChosenServicePerson = ({person}) => (
     </div>
 );
 
-export default ChosenServicePerson;
+export default connect(
+    ({ serviceUser }) => ({ person: serviceUser })
+)(ChosenServicePerson);
