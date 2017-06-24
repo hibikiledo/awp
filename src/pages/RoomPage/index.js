@@ -9,14 +9,12 @@ import PageContainer from '../../components/PageContainer'
 import PrimaryBtn from '../../components/PrimaryBtn';
 import RestaurantPage from './pages/RestaurantPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
-import {RoomPageConnect} from './helper'
 import RoomPin from '../../components/RoomPin';
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
 import TextInput from '../../components/TextInput';
 import VotePage from './pages/VotePage'
 import _ from 'lodash'
-import actionsFactory from './actions'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux';
 import moment from 'moment'
