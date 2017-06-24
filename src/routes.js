@@ -40,13 +40,20 @@ const ConnectedToast = connect(({ toasts }) => ({
     toasts
 }))(Toast)
 
-class AppRoute extends React.Component {
+
+const AppNavBar = connect(
+    ({roomPin}) => ({showCopy: roomPin, title: 'WeEat ❤︎' }), 
+    (dispatch) => ({
+        onCopyIconClick: () => dispatch(AppActions.copyLink())
+    })
+)(NavBar)
+
+export default class AppRoute extends React.Component {
     render() {
-        const { copyLink, roomPin } = this.props
         return (
             <div>
                 <nav className="full-width">
-                    <NavBar title="WeEat ❤︎" onCopyIconClick={copyLink} showCopy={roomPin} />
+                    <AppNavBar />
                 </nav>
                 <Route path="/" render={() => (
                   <ConnectedToast />
@@ -58,8 +65,3 @@ class AppRoute extends React.Component {
         )
     }
 }
-
-export default connect(
-    ({roomPin}) => ({roomPin}), 
-    (dispatch) => bindActionCreators(AppActions, dispatch)
-)(AppRoute)
