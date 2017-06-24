@@ -59,7 +59,34 @@ class RoomPage extends Component {
         return
       }
 
-      const start = room.startTime
+      const { roomState, remainingTime } = this.getRoomState(room)
+      this.setState({roomState, remainingTime})
+    }, 1000);
+
+    // setInterval(() => {   if (!this.props.me) {     console.log("No user")
+    // return;   }   this.props.sendMessage("Hello " + new Date(), this.props.me) },
+    // 1000)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.room && nextProps.room) {
+      const { roomState, remainingTime } = this.getRoomState(nextProps.room)
+      this.setState({
+        roomState,
+        remainingTime
+      })
+    }
+  }
+
+  componentWillUnmount() {
+    this
+      .props
+      .disconnectChat()
+    clearInterval(this.timerId)
+  }
+
+  getRoomState(room) {
+    const start = room.startTime
       const now = new Date().getTime()
 
       const nominateTimeInMs = room.nominateTime * 60 * 1000
@@ -82,30 +109,7 @@ class RoomPage extends Component {
         clearInterval(this.timerId)
       }
 
-      this.setState({roomState, remainingTime})
-    }, 1000);
-
-    // setInterval(() => {   if (!this.props.me) {     console.log("No user")
-    // return;   }   this.props.sendMessage("Hello " + new Date(), this.props.me) },
-    // 1000)
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.room && nextProps.room) {
-      const roomState = nextProps.room.lockMenu ? 'Summary' : 'Order'
-      const remainingTime = null
-      this.setState({
-        roomState,
-        remainingTime
-      })
-    }
-  }
-
-  componentWillUnmount() {
-    this
-      .props
-      .disconnectChat()
-    clearInterval(this.timerId)
+      return { roomState, remainingTime }
   }
 
   renderSetName = () => {
@@ -155,7 +159,8 @@ class RoomPage extends Component {
   }
 
   getPage(roomState) {
-    switch (this.state.roomState) {
+    // switch (this.state.roomState) {
+    switch ('Vote') {
       case 'Nominate':
         return <RestaurantPage />;
       case 'Vote':

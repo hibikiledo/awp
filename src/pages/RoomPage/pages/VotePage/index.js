@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux'
 import {connect} from 'react-redux';
 import { withRouter } from 'react-router'
 
-function VotePage({room, match, voteForRestaurant}) {
+function VotePage({me, room, match, voteForRestaurant}) {
   if (!room) {
     return null;
   }
@@ -18,11 +18,12 @@ function VotePage({room, match, voteForRestaurant}) {
         .keys(room.restaurants)
         .map((key, idx) => {
           const restaurant = room.restaurants[key];
+          const allVotes = _.values(restaurant.votes).reduce((result, v) => result + v, 0)
           return (
-            <div key={idx} onClick={() => voteForRestaurant(match.params.id, key)}>
+            <div key={idx} onClick={() => voteForRestaurant(me, match.params.id, key)}>
               <div>{restaurant.name}</div>
               <img src={restaurant.image}/>
-              <div>{restaurant.votes}</div>
+              <div>{allVotes}</div>
             </div>
           )
         })}
@@ -31,6 +32,6 @@ function VotePage({room, match, voteForRestaurant}) {
 }
 
 export default withRouter(connect(
-  ({room}) => ({room}),
+  ({room,me}) => ({room,me}),
   (dispatch) => bindActionCreators(VotePageActions, dispatch)
 )(VotePage))
