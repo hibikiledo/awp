@@ -15,7 +15,7 @@ export default combineReducers({
     }, []),
     chat: handleActions({
         CHAT_MESSAGE: (chat, action) => action.payload
-    }),
+    }, []),
     me: handleActions({
         SET_ME: (me, action) => action.payload
     }, null)
