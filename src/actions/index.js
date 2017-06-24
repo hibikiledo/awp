@@ -1,6 +1,30 @@
 import { createAction } from 'redux-actions'
 import { push } from 'react-router-redux'
 
+let currentChatRoomRef = null
+
+export const ChatActions = {
+  joinOrCreateChatRoom: (roomId) => (dispatch, getState, firebase) => {
+    if (currentChatRoomRef !== null) {
+      currentChatRoomRef.off()
+    }
+    currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
+    currentChatRoomRef.on('value', (s) => {
+      dispatch(createAction('CHAT_MESSAGES')(s.val()))
+    })
+  },
+  sendMessage: (message, name) => (dispatch, getState, firebase) => {
+    if (currentChatRoomRef == null) {
+      return;
+    }
+    currentChatRoomRef.push({
+      payload,
+      name,
+      type: "text"
+    })
+  }
+}
+
 export const AppActions = {
   setRoom: createAction('SET_ROOM'),
   addToast: (msg) => (dispatch, getState) => {
