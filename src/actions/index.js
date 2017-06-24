@@ -3,6 +3,28 @@ import {push} from 'react-router-redux'
 
 let currentChatRoomRef = null
 
+function requestPush(cb) {
+  if (Notification.permission === "granted") {
+    cb()
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        cb()
+      }
+    });
+  }
+}
+
+export function pushNotify(message) {
+  if (!("Notification" in window)) {
+    return;
+  }
+  requestPush(() => {
+    let notification = new Notification(message)
+  })
+}
+
 export const ChatActions = {
   joinOrCreateChatRoom: (roomId) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef !== null) {
@@ -68,7 +90,10 @@ export const RoomPageActions = {
     firebase
       .database()
       .ref(`room/${pin}`)
-      .on('value', (s) => dispatch(AppActions.setRoom(s.val())))
+      .on('value', (s) => {
+        pushNotify(`You just join room ${pin}, please enter your name.`)
+        dispatch(AppActions.setRoom(s.val()))
+      })
   },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
     firebase
