@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
+import copyClipbaord from './clipboard'
 
 let currentChatRoomRef = null
 
@@ -64,7 +65,16 @@ export const AppActions = {
     dispatch(createAction('ADD_TOAST')(msg))
     setTimeout(() => dispatch(createAction('DELETE_TOAST')(msg)), 3000)
   },
-  setMe: createAction('SET_ME')
+  setMe: createAction('SET_ME'),
+  copyLink: () => (dispatch, getState) => {
+    const roomPin = getState().roomPin
+    console.log("Copying url with pin:", roomPin, msg)
+    if (!roomPin) {
+      return;
+    }
+    const msg = `https://awp-pwa.firebaseapp.com/r/${roomPin}`
+    copyClipbaord(msg)
+  }
 }
 
 export const LandingPageActions = {
@@ -76,6 +86,7 @@ export const LandingPageActions = {
         const val = s.val()
         if (val) {
           dispatch(AppActions.setRoom(val))
+          dispatch(AppActions.setRoomPin(pin))
           dispatch(push('/r/' + pin));
         } else {
           dispatch(AppActions.addToast('Invalid Pin'))

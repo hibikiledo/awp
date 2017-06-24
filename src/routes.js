@@ -7,6 +7,8 @@ import React from 'react';
 import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux'
+import { AppActions } from './actions'
 
 function Toast({ toasts }) {
     return (
@@ -38,12 +40,13 @@ const ConnectedToast = connect(({ toasts }) => ({
     toasts
 }))(Toast)
 
-export default class AppRoute extends React.Component {
+class AppRoute extends React.Component {
     render() {
+        const { copyLink, roomPin } = this.props
         return (
             <div>
                 <nav className="full-width">
-                    <NavBar title="WeEat ❤︎" />
+                    <NavBar title="WeEat ❤︎" onCopyIconClick={copyLink} showCopy={roomPin} />
                 </nav>
                 <Route path="/" render={() => (
                   <ConnectedToast />
@@ -55,3 +58,8 @@ export default class AppRoute extends React.Component {
         )
     }
 }
+
+export default connect(
+    ({roomPin}) => ({roomPin}), 
+    (dispatch) => bindActionCreators(AppActions, dispatch)
+)(AppRoute)
