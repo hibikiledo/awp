@@ -25,11 +25,7 @@ const ListItem = ({title, description, rightItem}) => {
 
 ListItem.propTypes = {
     title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    rightItem: PropTypes.oneOf([
-        PropTypes.string,
-        PropTypes.element
-    ])
+    description: PropTypes.string
 };
 
 export default ListItem;

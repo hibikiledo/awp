@@ -1,6 +1,6 @@
 .list-item {
   border-bottom: solid 1px #e0e0e0;
-  padding: 8px
+  padding: 8px;
 }
 
 .list-item > .pull-left {
@@ -37,5 +37,4 @@
     font-size: 14px;
     text-align: left;
     color: #9a9a9a;
-    margin-bottom: 16px;
 }
