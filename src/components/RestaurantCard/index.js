@@ -1,15 +1,11 @@
 import './style.css';
 import React from 'react';
 import PropTypes from 'prop-types';
+import SquareImage from '../SquareImage';
 
 const RestaurantCard = ({ imageUrl, restaurantName, nominatedBy }) => (
     <div className="restaurant-card">
-        <div className="image" style={{
-            background: `url(${imageUrl}) top center no-repeat`,
-            backgroundSize: 'cover'
-        }}>
-            <img src={imageUrl} />
-        </div>
+        <SquareImage imageUrl={imageUrl} />
         <div className="title">{restaurantName}</div>
         <div className="description">nominated by <span className="highlight">{nominatedBy}</span></div>
     </div>
