@@ -123,14 +123,17 @@ export const OrderPageActions = {
       console.error("Room pin is missing, cannot add menu");
       return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
     }
+
     const me = getState().me
     if (_.isEmpty(me)) {
       console.error("Error: current user missing");
       return dispatch(push('/'))
     }
+
     if (_.isEmpty(menu)) {
       return dispatch(AppActions.addToast("Menu name should not be blank"))
     }
+
     const menusRef = firebase.database().ref(`room/${pin}/menus`)
     let menuRef = null
     let iseq = await menusRef.orderByChild("name").equalTo(menu).once('value')
@@ -141,6 +144,49 @@ export const OrderPageActions = {
     }
     return await menuRef.child('users').push(me)
   },
+  updateMenu: (menu, updatedAmount) => async (dispatch, getState, firebase) => {
+    const pin = getState().roomPin
+    if (_.isEmpty(pin)) {
+      console.error("Room pin is missing, cannot add menu");
+      return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
+    }
+
+    const me = getState().me
+    if (_.isEmpty(me)) {
+      console.error("Error: current user missing");
+      return dispatch(push('/'))
+    }
+
+    if (_.isEmpty(menu)) {
+      return dispatch(AppActions.addToast("Menu name should not be blank"))
+    }
+
+    const menusRef = firebase.database().ref(`room/${pin}/menus`);
+    const iseq = await menusRef.orderByChild("name").equalTo(menu).once('value');
+
+    if (!iseq.val()) {
+      return;
+    }
+
+    let menuRef = menusRef.child(_.first(_.keys(iseq.val())));
+
+    menuRef.once('value', (menu) => {
+      const menuValue = menu.val();
+      const currentAmount = _.countBy(_.values(menuValue.users))[me] || 0;
+      const myKeys = _.keys(_.pickBy(menuValue.users, _.partial(_.isEqual, me)));
+      const diff = currentAmount - updatedAmount;
+
+      if (diff === 0) {
+        return;
+      } else if (diff > 0) {
+        const diffKeys = myKeys.splice(0, diff);
+        diffKeys.forEach(key => menuRef.child('users/' + key).set(null));
+      } else {
+        const a = new Array(Math.abs(diff)).fill(1);
+        a.forEach(() => menuRef.child('users').push(me));
+      }
+    })
+  }
 }
 
 export const VotePageActions = {

@@ -14,7 +14,7 @@
   font-weight: 900;
   letter-spacing: -0.4px;
   text-align: left;
-  color: #000000;
+	color: #1f1f1f;
   border: none;
   border-bottom: solid 1px #979797;
   outline: none;
@@ -30,5 +30,5 @@
 }
 
 .add-menu > .menu-input::placeholder {
-  color: #000000;
+	color: #a8a8a8;
 }
