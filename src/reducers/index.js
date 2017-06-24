@@ -26,17 +26,13 @@ export default combineReducers({
                 if (!r.votes) {
                     return
                 }
-                let score = 0
-                if (_.isArray(r.votes)) {
-                    score = r.votes.length
-                } else if (_.isNumber(r.votes)) {
-                    score = r.votes
-                }
+                let score = _.sum(_.values(r.votes))
                 if (score > max) {
                     max = score
                     top = r
                 }
             })
+            top.voterNames = _.keys(top.votes)
             return top
         }
     }, null),

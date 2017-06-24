@@ -37,7 +37,7 @@ class VotePage extends Component {
               <RestaurantDisplayWithVoters
                 restaurantName={restaurant.name}
                 imageUrl={restaurant.imageUrl}
-                voters={['sharp', 'chu', 'earth', 'nut']}
+                voters={restaurant.voterNames}
               />
             </FormGroup>
           </div>
