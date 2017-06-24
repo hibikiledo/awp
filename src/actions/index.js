@@ -245,16 +245,11 @@ export const OrderPageActions = {
     })
   },
   endOrder: () => (dispatch, getState, firebase) => {
-    const { roomPin, topRestaurant } = getState()
-    const users = _.keys(topRestaurant.votes)
-    const unluckyUser = users[_.random(0, users.length)]
+    const { roomPin } = getState()
     firebase
       .database()
       .ref(`room/${roomPin}/lockMenu`)
       .set(true)
-      .then(() => {
-        firebase.database().ref(`room/${roomPin}/unluckyUser`).set(unluckyUser)
-      })
   }
 }
 

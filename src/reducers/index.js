@@ -89,7 +89,18 @@ const appReducer = combineReducers({
     chatDialogShow: handleActions({
         OPEN_CHAT_DIALOG: (__, action) => true,
         CLOSE_CHAT_DIALOG: (__, action) => false,
-    }, false)
+    }, false),
+    serviceUser: handleActions({
+        SET_ROOM: (serviceUser, action) => {
+            console.log('srvUser')
+            const room = action.payload
+            if (room && room.users) {
+                return _.keys(room.users).sort()[0]
+            } else {
+                return serviceUser
+            }
+        }
+    }, null)
 })
 
 export default (state, action) => {

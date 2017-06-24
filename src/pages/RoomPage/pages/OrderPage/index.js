@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 
 import AddMenu from '../../../../components/AddMenu'
 import BorderdNumericInput from '../../../../components/BorderdNumericInput'
+import ChosenServicePerson from '../../../../components/ChosenServicePerson';
 import FormGroup from '../../../../components/FormGroup'
 import ListItem from '../../../../components/ListItem'
 import {OrderPageActions} from '../../../../actions'
@@ -27,7 +28,7 @@ class VotePage extends Component {
   }
 
   render() {
-    const {restaurant, addMenu, updateMenu, menus, me} = this.props
+    const {restaurant, addMenu, updateMenu, menus, me, serviceUser} = this.props
     if (!restaurant) {
       return null;
     }
@@ -42,6 +43,7 @@ class VotePage extends Component {
                 imageUrl={restaurant.imageUrl}
                 voters={restaurant.voterNames}/>
             </FormGroup>
+            <ChosenServicePerson />
           </div>
         </FormGroup>
         <AddMenu onAddMenu={addMenu}/>
@@ -79,13 +81,17 @@ class VotePage extends Component {
           left: 0,
           padding: '8px'
         }}>
+        {me === serviceUser &&
           <PrimaryBtn onClick={this.props.endOrder}>
             End Ordering
-          </PrimaryBtn>
+          </PrimaryBtn>}
         </div>
       </div>
     )
   }
 }
 
-export default withRouter(connect(({topRestaurant, menus, me}) => ({restaurant: topRestaurant, menus, me}), (dispatch) => bindActionCreators(OrderPageActions, dispatch))(VotePage))
+export default withRouter(connect(
+  ({topRestaurant, menus, me, serviceUser }) => ({restaurant: topRestaurant, menus, me, serviceUser}),
+  (dispatch) => bindActionCreators(OrderPageActions, dispatch)
+)(VotePage))

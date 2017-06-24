@@ -35,7 +35,7 @@ class SummaryPage extends Component {
                 voters={topRestaurant.voterNames}
               />
             </FormGroup>
-            <ChosenServicePerson person={room.unluckyUser} />
+          <ChosenServicePerson />
           </div>
         </FormGroup>
         {
