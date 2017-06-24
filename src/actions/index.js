@@ -53,10 +53,6 @@ export const LandingPageActions = {
         if (val) {
           dispatch(AppActions.setRoom(val))
           dispatch(push('/r/' + pin));
-          firebase
-            .database()
-            .ref(`room/${pin}`)
-            .on('value', (s) => dispatch(AppActions.setRoom(s.val())))
         } else {
           dispatch(AppActions.addToast('Invalid Pin'))
         }
@@ -68,6 +64,12 @@ export const LandingPageActions = {
 }
 
 export const RoomPageActions = {
+  subscribeRoom: (pin) => (dispatch, getState, firebase) => {
+    firebase
+      .database()
+      .ref(`room/${pin}`)
+      .on('value', (s) => dispatch(AppActions.setRoom(s.val())))
+  },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
     firebase
       .database()

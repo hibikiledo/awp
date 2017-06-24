@@ -7,6 +7,7 @@ import _ from 'lodash'
 import actionsFactory from './actions'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
+import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 
 const RestaurantCard = (r) => {
   if (!r) {
@@ -26,6 +27,7 @@ class RoomPage extends Component {
   }
 
   componentDidMount() {
+    this.props.subscribeRoom(this.props.match.params.id)
     this.props.joinOrCreateChatRoom(this.props.match.params.id)
     // setInterval(() => {
     //   if (!this.props.me) {
@@ -64,6 +66,7 @@ class RoomPage extends Component {
         <div>
           <h2>Restaurants:
             <button >Show nearby</button>
+            <RestaurantSearchBox onSelect={console.log}/>
           </h2>
           {/*{(room.get('restaurants') || []).map((r, idx) => {})}*/}
         </div>
@@ -78,14 +81,14 @@ class RoomPage extends Component {
   }
 
   render() {
-    // if (!this.props.me) {
-    //   return this.renderSetName()
-    // } else if (this.props.me && this.props.room) {
-    //   return this.renderSelectRestaurant()
-    // } else {
-    //   return null;
-    // }
-    return <VotePage />
+    if (!this.props.me) {
+      return this.renderSetName()
+    } else if (this.props.me && this.props.room) {
+      return this.renderSelectRestaurant()
+    } else {
+      return null;
+    }
+    // return <VotePage />
   }
 }
 
