@@ -1,19 +1,19 @@
 import {ChatActions, RoomPageActions} from '../../actions'
 import React, {Component} from 'react';
 
+import FormGroup from '../../components/FormGroup'
+import FormSection from '../../components/FormSection'
 import OrderPage from './pages/OrderPage'
 import Orderpage from './pages/OrderPage'
+import PageContainer from '../../components/PageContainer'
+import PrimaryBtn from '../../components/PrimaryBtn';
 import RestaurantPage from './pages/RestaurantPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
-import TextInput from '../../components/TextInput';
-import PrimaryBtn from '../../components/PrimaryBtn';
-import RoomPin from '../../components/RoomPin';
-import PageContainer from '../../components/PageContainer'
-import FormSection from '../../components/FormSection'
-import FormGroup from '../../components/FormGroup'
 import {RoomPageConnect} from './helper'
+import RoomPin from '../../components/RoomPin';
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
+import TextInput from '../../components/TextInput';
 import VotePage from './pages/VotePage'
 import _ from 'lodash'
 import actionsFactory from './actions'
@@ -41,7 +41,7 @@ class RoomPage extends Component {
     super(props, ctx)
     this.state = {
       roomState: null,
-      remainingTime: 0
+      remainingTime: 0,
     }
   }
 
@@ -169,21 +169,21 @@ class RoomPage extends Component {
   }
 
   render() {
-    return <OrderPage />;
-    // if (!this.props.me) {
-    //   return this.renderSetName()
-    // } else if (this.props.me && this.props.room) {
-    //   return (
-    //     <div>
-    //       <StatusBar
-    //         states={states}
-    //         currentState={this.state.roomState}
-    //         remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
-    //     </div>
-    //   )
-    // } else {
-    //   return null
-    // }
+    // return <OrderPage />;
+    if (!this.props.me) {
+      return this.renderSetName()
+    } else if (this.props.me && this.props.room) {
+      return (
+        <div>
+          <StatusBar
+            states={states}
+            currentState={this.state.roomState}
+            remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
+        </div>
+      )
+    } else {
+      return null
+    }
   }
 }
 

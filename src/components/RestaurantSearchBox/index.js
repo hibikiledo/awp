@@ -1,9 +1,11 @@
+import './style.css';
+
 import React, {Component} from 'react';
+
 import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
-import searchIcon from './images/search.png';
 import {debounce} from 'lodash';
-import './style.css';
+import searchIcon from './images/search.png';
 
 const RestaurantSearchListItem = ({restaurantName, onSelect}) => (
   <div className="restuarant-search-item">
@@ -95,7 +97,7 @@ export default class RestaurantSearchBoxContainer extends Component {
       keyword: '',
       restaurants: []
     };
-    this.searchRestaurant = debounce(this.searchRestaurant.bind(this));
+    this.searchRestaurant = debounce(this.searchRestaurant.bind(this), 1000);
   }
   searchRestaurant(keyword) {
     this
