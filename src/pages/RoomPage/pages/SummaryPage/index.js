@@ -1,15 +1,16 @@
 import './style.css';
+
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import RestaurantDisplayWithVoters from '../../../../components/RestaurantDisplayWithVoters';
+
 import ChosenServicePerson from '../../../../components/ChosenServicePerson';
-import ListItem from '../../../../components/ListItem';
 import FormGroup from '../../../../components/FormGroup';
+import ListItem from '../../../../components/ListItem';
 import PageContainer from '../../../../components/PageContainer';
 import PageSection from '../../../../components/PageSection';
-import _ from 'lodash';
-
 import PropTypes from 'prop-types';
+import RestaurantDisplayWithVoters from '../../../../components/RestaurantDisplayWithVoters';
+import _ from 'lodash';
+import { connect } from 'react-redux';
 
 class SummaryPage extends Component {
   static propTypes = {
@@ -19,10 +20,10 @@ class SummaryPage extends Component {
   }
 
   render() {
-    const { menus, topRestaurant } = this.props;
+    const { menus, topRestaurant, room } = this.props;
 
     const grandTotal = _.sumBy(menus, 'total');
-    
+
     return (
       <div>
         <FormGroup>
@@ -34,7 +35,7 @@ class SummaryPage extends Component {
                 voters={['Earth']}
               />
             </FormGroup>
-            <ChosenServicePerson person={topRestaurant.nominator} />
+            <ChosenServicePerson person={room.unluckyUser} />
           </div>
         </FormGroup>
         {
@@ -58,5 +59,5 @@ class SummaryPage extends Component {
 }
 
 export default connect(
-  ({ menus, topRestaurant }) => ({ menus, topRestaurant })
+  ({ menus, topRestaurant, room }) => ({ menus, topRestaurant, room })
 )(SummaryPage);

@@ -1,5 +1,5 @@
 .status-bar {
-
+  margin: 8px 0 16px;
 }
 .status-bar > .indicators {
   display: flex;
