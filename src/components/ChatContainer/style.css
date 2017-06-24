@@ -33,4 +33,7 @@
   position: absolute;
   bottom: 10px;
   left: 0;
+  overflow-y: scroll;
+  right: 0;
+  top: 0;
 }
