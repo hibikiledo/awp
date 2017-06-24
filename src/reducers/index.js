@@ -42,16 +42,27 @@ export default combineReducers({
     }, null),
     menus: handleActions({
         SET_ROOM: (prevMenus, action) => {
-            const menu = _.get(action, 'payload.menus')
-            if (!menu) {
+            const menus = _.get(action, 'payload.menus')
+            if (!menus) {
                 return prevMenus
             }
 
-            // const users = menu.users
-            // const groupedUsers = _.groupBy(users, (u) => u)
-            // menu.groupedUsers = groupedUsers
+            return _.map(menus, (m) => {
+                const users = m.users || {}
+                const groupedUsers = _.groupBy(_.values(users), (u) => u)
+                const countedByName = _.map(groupedUsers, (arr, id) => {
+                    return {
+                        name: id,
+                        amount: (arr && arr.length) || 0
+                    }
+                })
 
-            return menu
+                return {
+                    name: m.name,
+                    users: countedByName,
+                    total: _.sumBy(countedByName, 'amount')
+                }
+            })
         }
     }, []),
     toasts: handleActions({
