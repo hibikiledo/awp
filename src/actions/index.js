@@ -39,7 +39,12 @@ export const ChatActions = {
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
-      dispatch(createAction('CHAT_MESSAGES')(s.val() || []))
+      const me = getState().me
+      const payload = {
+        me,
+        messages: s.val() || []
+      }
+      dispatch(createAction('CHAT_MESSAGES')(payload))
     })
   },
   disconnectChat: () => (dispatch, getState) => {
@@ -50,10 +55,12 @@ export const ChatActions = {
   },
   sendMessage: (message) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
+      console.error("Chat room subscribe is not active")
       return;
     }
     const state = getState()
     if (isBlank(state.me)) {
+      console.error("Chat room cannot find active user name")
       return;
     }
     return currentChatRoomRef.push({

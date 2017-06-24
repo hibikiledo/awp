@@ -72,7 +72,9 @@ const appReducer = combineReducers({
         DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
     }, []),
     chat: handleActions({
-        CHAT_MESSAGES: (chat, action) => action.payload
+        CHAT_MESSAGES: (chat, action) => {
+            return _.map(action.payload.messages, m => ({flag: m.name === action.payload.me, ...m}))
+        }
     }, null),
     me: handleActions({
         SET_ME: (me, action) => action.payload
