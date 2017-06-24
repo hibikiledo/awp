@@ -159,8 +159,8 @@ class RoomPage extends Component {
   }
 
   getPage(roomState) {
-    // switch (this.state.roomState) {
-    switch ('Vote') {
+    switch (this.state.roomState) {
+    // switch ('Vote') {
       case 'Nominate':
         return <RestaurantPage />;
       case 'Vote':

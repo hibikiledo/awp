@@ -1,7 +1,7 @@
 .nav-bar {
   display: flex;
   align-items: center;
-  padding: 12px;
+  padding: 18px;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
 }
 .nav-bar > .app-icon {
@@ -11,12 +11,12 @@
   cursor: pointer;
 }
 .nav-bar > .action-icon {
-  width: 21px;
-  height: 21px;
+  width: 22px;
+  height: 22px;
   cursor: pointer;
 }
 .nav-bar > .action-icon.first {
-  margin: 0 8px;
+  margin: 0 16px;
 }
 .nav-bar > .title {
   font-family: Roboto, Arial;
