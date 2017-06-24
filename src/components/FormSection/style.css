@@ -1,0 +1,8 @@
+.form-section {
+  display: block;
+  align-items: center;
+  flex-flow: column;
+  width: 55%;
+  margin: auto;
+  box-sizing: border-box;
+}

@@ -42,11 +42,9 @@ const RestaurantWithVoters = ({title, imageUrl,imageWidth, vote}) => {
 
 RestaurantWithVoters.propTypes = {
     title: PropTypes.string.isRequired,
-    description: PropTypes.string,
-    rightItem: PropTypes.oneOf([
-        PropTypes.string,
-        PropTypes.element
-    ])
+    imageUrl: PropTypes.string.isRequired,
+    imageWidth: PropTypes.number.isRequired,
+    vote: PropTypes.number.isRequired,
 };
 
 export default RestaurantWithVoters;

@@ -1,0 +1,12 @@
+.card-scroll {
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  overflow: auto;
+  padding: 16px 0;
+  margin: 24px 0;
+}
+.card-scroll > .card-container {
+  flex: 0 0 33%;
+  padding: 0 8px;
+}

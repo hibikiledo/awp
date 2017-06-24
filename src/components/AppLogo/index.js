@@ -2,8 +2,8 @@ import React from 'react';
 import logo from './images/logo.jpg';
 import './style.css';
 
-const AppLogo = () => (
-    <div className="app-logo">
+const AppLogo = (props) => (
+    <div className="app-logo" {...props}>
         <img src={logo} className="image" />
     </div>
 );

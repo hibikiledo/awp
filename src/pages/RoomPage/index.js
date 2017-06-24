@@ -2,12 +2,19 @@ import {ChatActions, RoomPageActions} from '../../actions'
 import React, {Component} from 'react';
 
 import OrderPage from './pages/OrderPage'
+import Orderpage from './pages/OrderPage'
+import RestaurantPage from './pages/RestaurantPage'
 import RestaurantSearchBox from '../../components/RestaurantSearchBox';
+import TextInput from '../../components/TextInput';
+import PrimaryBtn from '../../components/PrimaryBtn';
+import RoomPin from '../../components/RoomPin';
+import PageContainer from '../../components/PageContainer'
+import FormSection from '../../components/FormSection'
+import FormGroup from '../../components/FormGroup'
 import {RoomPageConnect} from './helper'
 import StatusBar from '../../components/StatusBar'
 import SummaryPage from './pages/SummaryPage'
 import VotePage from './pages/VotePage'
-import Orderpage from './pages/OrderPage'
 import _ from 'lodash'
 import actionsFactory from './actions'
 import {bindActionCreators} from 'redux'
@@ -48,7 +55,6 @@ class RoomPage extends Component {
 
     this.timerId = setInterval(() => {
       const {room} = this.props
-      console.log(room)
       if (!room) {
         return
       }
@@ -71,6 +77,8 @@ class RoomPage extends Component {
         roomState = 'Vote'
         remainingTime = moment(endOfVoteTime - now).format(dateFormat)
       } else {
+        roomState = room.lockMenu ? 'Summary' : 'Order'
+        remainingTime = null
         clearInterval(this.timerId)
       }
 
@@ -83,16 +91,9 @@ class RoomPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let roomState
-    let remainingTime
     if (this.props.room && nextProps.room) {
-      if (!nextProps.room.lockMenu) {
-        roomState = 'Order'
-        remainingTime = null
-      } else {
-        roomState = 'Summary'
-        remainingTime = null
-      }
+      const roomState = nextProps.room.lockMenu ? 'Summary' : 'Order'
+      const remainingTime = null
       this.setState({
         roomState,
         remainingTime
@@ -109,18 +110,24 @@ class RoomPage extends Component {
 
   renderSetName = () => {
     return (
-      <div>
-        <h1>Enter your name</h1>
-        <input type="text" ref="name"/>
-        <button
-          onClick={() => {
-          this
-            .props
-            .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
-        }}>
-          Join
-        </button>
-      </div>
+      <PageContainer>
+        <FormSection>
+          <RoomPin pin={this.props.match.params.id} style={{
+            marginBottom: '50px'
+          }} />
+          <FormGroup>
+            <input type="text" className="text-input" placeholder="Enter your name" ref="name"/>
+          </FormGroup>
+          <PrimaryBtn
+            onClick={() => {
+            this
+              .props
+              .tryJoinRoomWithName(this.props.match.params.id, this.refs.name.value)
+          }}>
+            Join
+          </PrimaryBtn>
+        </FormSection>
+      </PageContainer>
     )
   }
 
@@ -147,12 +154,11 @@ class RoomPage extends Component {
     )
   }
 
-  renderPage() {}
-
   getPage(roomState) {
-    switch (this.state.roomState) {
+    // switch (this.state.roomState) {
+    switch('Nominate') {
       case 'Nominate':
-        return this.renderSelectRestaurant();
+        return <RestaurantPage />;
       case 'Vote':
         return <VotePage/>;
       case 'Order':
