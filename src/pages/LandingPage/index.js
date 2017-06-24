@@ -27,24 +27,6 @@ class LandingPage extends Component {
     pin: ''
   }
 
-  renderRequestName() {
-    return (
-      <div className="App">
-        PIN
-        XXXXXX
-        <TextInput />
-        <PrimaryBtn onClick={() => {
-          this.props.tryJoinRoomWithName('Nut')
-        }}
-        >
-          JOIN
-        </PrimaryBtn>
-        <Link to='/create'>Create new room</Link>
-        <RestaurantSearchBox onSelect={console.log}/>
-      </div>
-    );
-  }
-
   renderRequestPin() {
     return (
       <PageContainer>
@@ -86,9 +68,7 @@ class LandingPage extends Component {
   render() {
     return (
       <div>
-        { this.props.room && !this.props.room.joined
-          ? this.renderRequestName()
-          : this.renderRequestPin() }
+        {this.renderRequestPin()}
       </div>
     )
   }
