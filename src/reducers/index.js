@@ -63,8 +63,11 @@ const appReducer = combineReducers({
                     total: _.sumBy(countedByName, 'amount')
                 }
             })
-
+            
             return _.filter(mappedResult, (menu) => _.get(menu, 'total', 0))
+        },
+        REMOVE_MENU: (prevMenus, action) => {
+            return _.filter(prevMenus, m => !_.partial(_.isEqual, _.get(action, 'payload.menuName'))(m));
         }
     }, []),
     toasts: handleActions({

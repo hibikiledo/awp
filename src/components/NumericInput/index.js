@@ -17,6 +17,7 @@ export default class TextInput extends Component {
   }
   constructor(props) {
     super(props);
+    
     this.state = {
       value: props.value || 0
     };
@@ -28,21 +29,26 @@ export default class TextInput extends Component {
       return;
     }
 
+    const nextValue = this.state.value + 1;
+
     this.setState({
-      value: this.state.value + 1
+      value: nextValue
     });
+
+    this.props.onChange(nextValue);
   }
   decrease() {
     if (this.state.value <= this.props.min) {
       return;
     }
 
+    const nextValue = this.state.value - 1;
+
     this.setState({
-      value: this.state.value - 1
+      value: nextValue
     });
-  }
-  componentDidUpdate() {
-    this.props.onChange(this.state.value);
+
+    this.props.onChange(nextValue);
   }
   shouldComponentUpdate(nextProps, nextState) {
     return this.state.value !== nextState.value;
