@@ -1,11 +1,11 @@
+import './styles/global.css'
+
 import CreateRoomPage from './pages/CreateRoomPage'
 import LandingPage from './pages/LandingPage';
-import OrderPage from './pages/OrderPage';
+import NavBar from './components/NavBar';
 import React from 'react';
 import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
-import SummaryPage from './pages/SummaryPage';
-import VotePage from './pages/VotePage';
 import { connect } from 'react-redux';
 
 function Toast({ toasts }) {
@@ -40,15 +40,15 @@ export default class AppRoute extends React.Component {
     render() {
         return (
             <div>
+                <nav className="full-width">
+                    <NavBar title="WeEat ❤︎" />
+                </nav>
                 <Route path="/" render={() => (
                   <ConnectedToast />
                 )} />
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/create" component={CreateRoomPage} />
                 <Route exact path="/r/:id" component={RoomPage} />
-                <Route exact path='/r/:id/vote' component={VotePage} />
-                <Route exact path='/r/:id/order' component={OrderPage} />
-                <Route exact path='/r/:id/summary' component={SummaryPage} />
             </div>
         )
     }
