@@ -7,6 +7,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router'
 import RestaurantDisplayWithVoters from '../../../../components/RestaurantDisplayWithVoters'
+import AddMenu from '../../../../components/AddMenu'
+import FormGroup from '../../../../components/FormGroup'
+import ListItem from '../../../../components/ListItem'
+import BorderdNumericInput from '../../../../components/BorderdNumericInput'
 
 class VotePage extends Component {
 
@@ -20,26 +24,49 @@ class VotePage extends Component {
   }
   
   render() {
-    const { restaurant, addMenu, menus } = this.props
+    const { restaurant, addMenu, updateMenu, menus, me } = this.props
     if (!restaurant) {
       return null;
     }
 
     return (
       <div>
-        <RestaurantDisplayWithVoters restaurantName={restaurant.name} imageUrl={restaurant.image} voters={['sharp', 'chu', 'earth', 'nut']} />
+        <FormGroup>
+          <div className="restaurant-info full-width">
+            <FormGroup>
+              <RestaurantDisplayWithVoters
+                restaurantName={restaurant.name}
+                imageUrl={restaurant.imageUrl}
+                voters={['sharp', 'chu', 'earth', 'nut']}
+              />
+            </FormGroup>
+          </div>
+        </FormGroup>
+        <AddMenu
+            onAddMenu={addMenu}
+        />
         <div>
-          <input type="text" ref="menu" />
-          <button onClick={async () => this.handleAddMenu()}>Add</button>
-        </div>
-        <div>
-          {_.map(menus, (m, idx) => {
-            return (
-              <div key={idx}>
-                <span>{m.name}</span>
-              </div>
-            )
-          })}
+          {
+            menus && menus.map((m,i) => <ListItem
+              key={i}
+              title={m.name}
+              description={m.users.map(u => `${u.name} x${u.amount}`).join(', ')}
+              rightItem={<BorderdNumericInput 
+                onChange={(amount) => {
+                  updateMenu(m.name, amount)
+                }}
+                value={m.users.reduce((sum, u) => {
+                  if (u.name !== me) {
+                    return sum;
+                  } 
+
+                  sum += u.amount;
+
+                  return sum;
+                }, 0)}/>}
+              />
+              )
+          }
         </div>
       </div>
     )
@@ -47,6 +74,6 @@ class VotePage extends Component {
 }
 
 export default withRouter(connect(
-  ({ topRestaurant, menus }) => ({ restaurant: topRestaurant, menus }),
+  ({ topRestaurant, menus, me }) => ({ restaurant: topRestaurant, menus, me }),
   (dispatch) => bindActionCreators(OrderPageActions, dispatch)
 )(VotePage))
