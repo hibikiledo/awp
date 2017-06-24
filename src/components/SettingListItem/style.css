@@ -1,0 +1,20 @@
+.setting-list-item {
+  display: flex;
+  padding: 12px 0;
+}
+.setting-list-item > .setting-info {
+  flex: 0 0 70%;
+}
+.setting-list-item > .setting-info > .option {
+  font-family: Roboto;
+  font-size: 16px;
+  color: #424242;
+}
+.setting-list-item > .setting-info > .explanation {
+  font-family: Roboto;
+  font-size: 13px;
+  color: #e21a00;
+}
+.setting-list-item > .form-control {
+  flex: 0 0 30%;
+}

@@ -1,19 +1,31 @@
-import React, { Component } from 'react';
+import './style.css'
+import '../../styles/global.css'
 
+import React, {Component} from 'react';
+
+import NumericInput from '../../components/NumericInput'
 import PrimaryButton from '../../components/PrimaryBtn'
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import SettingListItem from '../../components/SettingListItem'
+import TextInput from '../../components/TextInput'
 import _ from 'lodash';
+import {connect} from 'react-redux';
 
 class CreateRoomPage extends Component {
-
   render() {
-    console.log(this.props.firebase)
     return (
       <div>
-        <input type="text" ref={(el) => this.roomName = el} />
-        <input type="text" ref={(el) => this.nominateTime = el} />
-        <button onClick={() => {
+        <div className="room-name-form full-width">
+          <TextInput placeholder="Room name"/>
+        </div>
+        <div className="room-settings-form">
+          <SettingListItem
+            option="Nominate Time"
+            explanation="Minutes"
+            control={< NumericInput />}/>
+        </div>
+        <PrimaryButton
+          onClick={() => {
             var newRoom = global.firebase.database()
               .ref('room')
               .push({
@@ -41,17 +53,13 @@ class CreateRoomPage extends Component {
                 roomkey: newRoom.key,
                 status: false
               });
-        }}
-        >
-          Create
-        </button>
+
+            console.log('create room in firebase')
+        }}>CREATE</PrimaryButton>
       </div>
     );
   }
 }
 
-
-const mapStateToProps = ({ firebase }) => ({
-  firebase
-})
+const mapStateToProps = ({firebase}) => ({firebase})
 export default connect(mapStateToProps)(CreateRoomPage);
