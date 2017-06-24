@@ -18,9 +18,11 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "@storybook/react": "^3.1.5",
     "firebase-tools": "^3.9.1",
     "react-scripts": "1.0.7",
-    "@storybook/react": "^3.1.5"
+    "@storybook/addon-actions": "^3.1.5",
+    "storybook-host": "^3.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

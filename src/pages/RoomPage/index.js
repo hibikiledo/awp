@@ -1,47 +1,19 @@
 import React, { Component } from 'react';
+
+import { RoomPageConnect } from './helper'
+import _ from 'lodash'
+import actionsFactory from './actions'
 import { connect } from 'react-redux';
 
-import PropTypes from 'prop-types';
-
-class RoomPageFirebase extends Component {
-  constructor(props, ctx) {
-    super(props, ctx)
-    this.state = null
+const RestaurantCard = (r) => {
+  if (!r) {
+    return;
   }
-
-  componentDidMount() {
-    const id = this.props.roomId
-    const ref = global.firebase.database().ref(`room/${id}`)
-    ref.on('value', (s) => {
-      this.setState(s.val())
-    })
-
-    // setInterval(() => {
-    //   ref.update({
-    //     time: new Date().getTime()
-    //   })
-    // }, 1000)
-  }
-
-  render() {
-    if (!this.state) {
-      return <div>Loading...</div>
-    }
-
-    // console.log(this.state)
-    const props = this.props
-    const ChildComp = this.props.component
-    return <ChildComp {...props} room={this.state} />
-  }
-}
-
-function RoomPageConnect(fn) {
-  return function(comp) {
-    return function(props) {
-      const id = fn(props)
-      return <RoomPageFirebase roomId={id} component={comp} />
-    }
-  }
+  return (
+    <div>
+      {r.get('name')}
+    </div>
+  )
 }
 
 class RoomPage extends Component {
@@ -49,23 +21,61 @@ class RoomPage extends Component {
     super(props, ctx)
     this.state = null
   }
-  
-  render() {
-    console.log(this.props)
+
+  renderSetName = () => {
+    const { setName } = this.props.actions
     return (
       <div>
-        <h1>Room page</h1>
+        <h1>Enter your name</h1>
+        <input type="text" ref="name" />
+        <button onClick={() => { setName(this.refs.name.value) }}>Join</button>
       </div>
     )
   }
+
+  renderSelectRestaurant = () => {
+    //room is ImmutableJS object
+    const { room } = this.props
+    const { updateRestaurantsNearby } = this.props.actions
+    console.log(room.toJS())
+
+    return (
+      <div>
+        <h1>Room page</h1>
+        <div>
+          <h2>Restaurants: <button onClick={() => updateRestaurantsNearby()}>Show nearby</button></h2>
+          {(room.get('restaurants') || []).map((r, idx) => {
+
+          })}
+        </div>
+        <div>
+          <h2>Members:</h2>
+          {room.get('members').toArray().map((name, idx) => {
+            return <span key={idx}>{name} </span>
+          })}
+        </div>
+      </div>
+    )
+  }
+
+  render() {
+    const { me } = this.props
+    if (!me) {
+      return this.renderSetName()
+    } else {
+      return this.renderSelectRestaurant()
+    }
+  }
 }
 
-const mapState = (state, {match}) => {
+const mapState = (state, { match }) => {
   return {
     roomId: match.params.id
   }
 };
 
-const mapAction = {}
-
-export default connect(mapState)(RoomPageConnect(({roomId}) => roomId)(RoomPage))
+export default connect(mapState)(
+  RoomPageConnect(
+    ({ roomId }) => roomId,
+    actionsFactory)(RoomPage)
+)

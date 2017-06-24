@@ -1,0 +1,30 @@
+.nav-bar {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.12);
+}
+.nav-bar > .app-icon {
+  width: 25px;
+  height: 25px;
+  margin-right: 14px;
+  cursor: pointer;
+}
+.nav-bar > .action-icon {
+  width: 21px;
+  height: 21px;
+  cursor: pointer;
+}
+.nav-bar > .action-icon.first {
+  margin: 0 8px;
+}
+.nav-bar > .title {
+  font-family: Roboto, Arial;
+  font-size: 14px;
+  font-weight: 500;
+  color: #424242;
+  flex: 1 0 auto;
+}
+.nav-bar > .icons-container {
+  flex: 0 0 auto;
+}

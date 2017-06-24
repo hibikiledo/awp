@@ -1,0 +1,19 @@
+.borderless-btn {
+  box-sizing: border-box;
+  padding: 0;
+  border: 0;
+  background: none;
+  outline: none;
+  width: 100%;
+  padding: 16px;
+  border-radius: 2px;
+  font-family: Roboto, Arial;
+  font-size: 14px;
+  font-weight: 900;
+  transition: 0.15s all ease;
+  color: #e21a00;
+}
+
+.borderless-btn:hover {
+  text-decoration: underline;
+}
