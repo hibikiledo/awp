@@ -1,8 +1,28 @@
-.landing-page > .request-pin-form {
-  width: 70%;
-  margin: auto;
+.landing-page {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
+.landing-page > .center {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+}
+.landing-page > .center > .app-logo {
+  max-width: 90%;
+}
+.landing-page > .center >.request-pin-form {
+  flex: 0 0 70%;
+  margin-top: 48px;
+}
+.landing-page > .center >.request-pin-form > *:nth-child(2){
+  margin-top: 8px;
+}
 .landing-page > .footer {
   position: fixed;
   bottom: 0;

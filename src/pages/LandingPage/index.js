@@ -2,6 +2,7 @@ import './style.css'
 
 import React, { Component } from 'react';
 
+import AppLogo from '../../components/AppLogo'
 import { AppSelectors } from '../../selectors'
 import BorderlessBtn from '../../components/BorderlessBtn'
 import { LandingPageActions } from '../../actions'
@@ -40,17 +41,21 @@ class LandingPage extends Component {
   renderRequestPin() {
     return (
       <div className="landing-page">
-        <div className="request-pin-form">
-          <TextInput
-            value={this.state.pin}
-            onChange={(e) => {
-            this.setState({ pin: e.target.value })
-          }} />
-          <PrimaryBtn onClick={() => {
-            this.props.tryJoinRoomWithPin(this.state.pin)
-          }}>
-            JOIN
-          </PrimaryBtn>
+        <div className="center">
+          <div className="app-logo"><AppLogo /></div>
+          <div className="request-pin-form">
+            <TextInput
+              placeholder="Room PIN"
+              value={this.state.pin}
+              onChange={(e) => {
+              this.setState({ pin: e.target.value })
+            }} />
+            <PrimaryBtn onClick={() => {
+              this.props.tryJoinRoomWithPin(this.state.pin)
+            }}>
+              JOIN
+            </PrimaryBtn>
+          </div>
         </div>
         <div className="footer">
           <BorderlessBtn onClick={() => {
