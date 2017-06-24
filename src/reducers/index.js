@@ -80,6 +80,10 @@ const appReducer = combineReducers({
     restaurantSearchBoxOpen: handleActions({
         OPEN_RESTAURANT_SEARCH_BOX: (__, action) => true,
         CLOSE_RESTAURANT_SEARCH_BOX: (__, action) => false,
+    }, false),
+    chatDialogShow: handleActions({
+        OPEN_CHAT_DIALOG: (__, action) => true,
+        CLOSE_CHAT_DIALOG: (__, action) => false,
     }, false)
 })
 

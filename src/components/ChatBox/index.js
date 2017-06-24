@@ -6,7 +6,7 @@ import ChatDisplay from '../ChatDisplay';
 import {debounce} from 'lodash';
 
 
-const Chatbox = ({messages}) => {
+const Chatbox = ({messages, sendMessage}) => {
   return (
     <div className="container">
       {messages.map((r, i) => <ChatDisplay
@@ -15,7 +15,7 @@ const Chatbox = ({messages}) => {
         name={r.name}
         message={r.message} />
       )}
-      <ChatInput />
+      <ChatInput onSendIconClick={sendMessage} />
     </div>
   );
 }

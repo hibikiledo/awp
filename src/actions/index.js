@@ -48,18 +48,25 @@ export const ChatActions = {
     }
     currentChatRoomRef = null
   },
-  sendMessage: (message, name) => (dispatch, getState, firebase) => {
+  sendMessage: (message) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
+      return;
+    }
+    const state = getState()
+    if (isBlank(state.me)) {
       return;
     }
     return currentChatRoomRef.push({
       payload: message,
-      name,
+      name: state.me,
       type: "text"
     })
   },
   showChatDialog: () => (dispatch, getState, firebase) => {
-
+    dispatch(createAction("OPEN_CHAT_DIALOG")())
+  },
+  closeChatDialog: () => (dispatch, getState, firebase) => {
+    dispatch(createAction("CLOSE_CHAT_DIALOG")())
   }
 }
 

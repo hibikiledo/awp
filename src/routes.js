@@ -42,7 +42,7 @@ const ConnectedToast = connect(({ toasts }) => ({
 }))(Toast)
 
 const ConnectedChatContainer = connect(
-    ({chat}) => ({chat}),
+    ({chat, chatDialogShow}) => ({chat, chatDialogShow}),
     (dispatch) => bindActionCreators(ChatActions, dispatch)
 )(ChatContainer)
 
