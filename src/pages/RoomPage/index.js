@@ -1,7 +1,8 @@
+import { ChatActions, RoomPageActions } from '../../actions'
 import React, { Component } from 'react';
 
-import { RoomPageActions, ChatActions } from '../../actions'
 import { RoomPageConnect } from './helper'
+import VotePage from './pages/VotePage'
 import _ from 'lodash'
 import actionsFactory from './actions'
 import { bindActionCreators } from 'redux'
@@ -77,13 +78,14 @@ class RoomPage extends Component {
   }
 
   render() {
-    if (!this.props.me) {
-      return this.renderSetName()
-    } else if (this.props.me && this.props.room) {
-      return this.renderSelectRestaurant()
-    } else {
-      return null;
-    }
+    // if (!this.props.me) {
+    //   return this.renderSetName()
+    // } else if (this.props.me && this.props.room) {
+    //   return this.renderSelectRestaurant()
+    // } else {
+    //   return null;
+    // }
+    return <VotePage />
   }
 }
 

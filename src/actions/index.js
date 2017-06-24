@@ -1,9 +1,5 @@
-import {
-  createAction
-} from 'redux-actions'
-import {
-  push
-} from 'react-router-redux'
+import {createAction} from 'redux-actions'
+import {push} from 'react-router-redux'
 
 let currentChatRoomRef = null
 
@@ -49,16 +45,22 @@ export const AppActions = {
 
 export const LandingPageActions = {
   tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
-    firebase.database().ref(`room/${pin}`).once('value', (s) => {
-      const val = s.val()
-      if (val) {
-        dispatch(AppActions.setRoom(val))
-        dispatch(push('/r/' + pin));
-        firebase.database().ref(`room/${pin}`).on('value', (s) => dispatch(AppActions.setRoom(s.val())))
-      } else {
-        dispatch(AppActions.addToast('Invalid Pin'))
-      }
-    })
+    firebase
+      .database()
+      .ref(`room/${pin}`)
+      .once('value', (s) => {
+        const val = s.val()
+        if (val) {
+          dispatch(AppActions.setRoom(val))
+          dispatch(push('/r/' + pin));
+          firebase
+            .database()
+            .ref(`room/${pin}`)
+            .on('value', (s) => dispatch(AppActions.setRoom(s.val())))
+        } else {
+          dispatch(AppActions.addToast('Invalid Pin'))
+        }
+      })
   },
   navigateToCreateRoomPage: () => (dispatch, getState, firebase) => {
     dispatch(push('/create'))
@@ -72,5 +74,14 @@ export const RoomPageActions = {
       .ref(`room/${roomId}/users`)
       .push(name)
       .then(() => dispatch(AppActions.setMe(name)))
-  },
+  }
+}
+
+export const VotePageActions = {
+  voteForRestaurant: (roomId, restaurantId) => (dispatch, getState, firebase) => {
+    firebase
+      .database()
+      .ref(`room/${roomId}/restaurants/${restaurantId}/votes`)
+      .transaction((currentVotes) => currentVotes + 1)
+  }
 }
