@@ -21,9 +21,10 @@ export function pushNotify(message) {
   if (!("Notification" in window)) {
     return;
   }
-  requestPush(() => {
-    let notification = new Notification(message)
-  })
+  // Todo: This breaks when run with service worker
+  // requestPush(() => {
+  //   let notification = new Notification(message)
+  // })
 }
 
 export const ChatActions = {
