@@ -92,11 +92,11 @@ class RoomPage extends Component {
         roomState = 'Summary'
         remainingTime = null
       }
+      this.setState({
+        roomState,
+        remainingTime
+      })
     }
-    this.setState({
-      roomState,
-      remainingTime
-    })
   }
 
   componentWillUnmount() {
