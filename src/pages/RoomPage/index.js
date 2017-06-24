@@ -71,6 +71,8 @@ class RoomPage extends Component {
         roomState = 'Vote'
         remainingTime = moment(endOfVoteTime - now).format(dateFormat)
       } else {
+        roomState = room.lockMenu ? 'Summary' : 'Order'
+        remainingTime = null
         clearInterval(this.timerId)
       }
 
@@ -83,16 +85,9 @@ class RoomPage extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let roomState
-    let remainingTime
     if (this.props.room && nextProps.room) {
-      if (!nextProps.room.lockMenu) {
-        roomState = 'Order'
-        remainingTime = null
-      } else {
-        roomState = 'Summary'
-        remainingTime = null
-      }
+      const roomState = nextProps.room.lockMenu ? 'Summary' : 'Order'
+      const remainingTime = null
       this.setState({
         roomState,
         remainingTime
@@ -146,8 +141,6 @@ class RoomPage extends Component {
       </div>
     )
   }
-
-  renderPage() {}
 
   getPage(roomState) {
     switch (this.state.roomState) {
