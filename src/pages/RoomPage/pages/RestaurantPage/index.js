@@ -31,8 +31,8 @@ function RestaurantPage({
         <div className="card-scroll">
           {_
             .values(room.restaurants)
-            .map((restaurant) => (
-              <div className="card-container">
+            .map((restaurant, idx) => (
+              <div key={idx} className="card-container">
                 <RestaurantCard
                   imageUrl={restaurant.imageUrl}
                   nominatedBy={restaurant.nominator}

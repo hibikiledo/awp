@@ -1,6 +1,7 @@
 import './style.css';
-import React from 'react';
+
 import PropTypes from 'prop-types';
+import React from 'react';
 import SquareImage from '../SquareImage';
 
 const RestaurantCard = ({ imageUrl, restaurantName, nominatedBy }) => (
@@ -12,7 +13,7 @@ const RestaurantCard = ({ imageUrl, restaurantName, nominatedBy }) => (
 );
 
 RestaurantCard.propTypes = {
-    imageUrl: PropTypes.string.isRequired,
+    imageUrl: PropTypes.string,
     restaurantName: PropTypes.string.isRequired,
     nominatedBy: PropTypes.string.isRequired
 }
