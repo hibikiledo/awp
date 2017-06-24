@@ -5,6 +5,10 @@ import copyClipbaord from './clipboard'
 
 let currentChatRoomRef = null
 
+function isBlank(s) {
+  return _.isString(s) ? !_.trim(s) : _.isEmpty(s)
+}
+
 function requestPush(cb) {
   if (Notification.permission === "granted") {
     cb()
@@ -80,7 +84,7 @@ export const AppActions = {
 
 export const LandingPageActions = {
   tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
-    if (_.isEmpty(pin)) {
+    if (isBlank(pin)) {
       return dispatch(AppActions.addToast("Pin cannot empty"))
     }
     firebase
@@ -123,6 +127,10 @@ export const RoomPageActions = {
       })
   },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
+    if (isBlank(name)) {
+      return dispatch(AppActions.addToast("Name cannot be blank"))
+    }
+    name = _.trim(name)
     firebase
       .database()
       .ref(`room/${roomId}/users`)
@@ -134,18 +142,18 @@ export const RoomPageActions = {
 export const OrderPageActions = {
   addMenu: (menu) => async (dispatch, getState, firebase) => {
     const pin = getState().roomPin
-    if (_.isEmpty(pin)) {
+    if (isBlank(pin)) {
       console.error("Room pin is missing, cannot add menu");
       return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
     }
 
     const me = getState().me
-    if (_.isEmpty(me)) {
+    if (isBlank(me)) {
       console.error("Error: current user missing");
       return dispatch(push('/'))
     }
 
-    if (_.isEmpty(menu)) {
+    if (isBlank(menu)) {
       return dispatch(AppActions.addToast("Menu name should not be blank"))
     }
 
@@ -161,18 +169,18 @@ export const OrderPageActions = {
   },
   updateMenu: (menu, updatedAmount) => async (dispatch, getState, firebase) => {
     const pin = getState().roomPin
-    if (_.isEmpty(pin)) {
+    if (isBlank(pin)) {
       console.error("Room pin is missing, cannot add menu");
       return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
     }
 
     const me = getState().me
-    if (_.isEmpty(me)) {
+    if (isBlank(me)) {
       console.error("Error: current user missing");
       return dispatch(push('/'))
     }
 
-    if (_.isEmpty(menu)) {
+    if (isBlank(menu)) {
       return dispatch(AppActions.addToast("Menu name should not be blank"))
     }
 
