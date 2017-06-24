@@ -1,5 +1,6 @@
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
+import _ from 'lodash'
 
 let currentChatRoomRef = null
 
@@ -58,6 +59,7 @@ export const ChatActions = {
 
 export const AppActions = {
   setRoom: createAction('SET_ROOM'),
+  setRoomPin: createAction('SET_ROOM_PIN'),
   addToast: (msg) => (dispatch, getState) => {
     dispatch(createAction('ADD_TOAST')(msg))
     setTimeout(() => dispatch(createAction('DELETE_TOAST')(msg)), 3000)
@@ -87,11 +89,21 @@ export const LandingPageActions = {
 
 export const RoomPageActions = {
   subscribeRoom: (pin) => (dispatch, getState, firebase) => {
+    let notified = false
     firebase
       .database()
       .ref(`room/${pin}`)
       .on('value', (s) => {
-        pushNotify(`You just join room ${pin}, please enter your name.`)
+        if (!s.val()) {
+          console.error("Room not found")
+          return dispatch(push('/'))
+        }
+        if (notified === false) {
+          pushNotify(`You just join room ${pin}, please enter your name.`)
+          notified = true
+        }
+
+        dispatch(AppActions.setRoomPin(pin))
         dispatch(AppActions.setRoom(s.val()))
       })
   },
@@ -102,6 +114,33 @@ export const RoomPageActions = {
       .push(name)
       .then(() => dispatch(AppActions.setMe(name)))
   }
+}
+
+export const OrderPageActions = {
+  addMenu: (menu) => async (dispatch, getState, firebase) => {
+    const pin = getState().roomPin
+    if (_.isEmpty(pin)) {
+      console.error("Room pin is missing, cannot add menu");
+      return dispatch(AppActions.addToast("Room pin is missing, cannot add menu"))
+    }
+    const me = getState().me
+    if (_.isEmpty(me)) {
+      console.error("Error: current user missing");
+      return dispatch(push('/'))
+    }
+    if (_.isEmpty(menu)) {
+      return dispatch(AppActions.addToast("Menu name should not be blank"))
+    }
+    const menusRef = firebase.database().ref(`room/${pin}/menus`)
+    let menuRef = null
+    let iseq = await menusRef.orderByChild("name").equalTo(menu).once('value')
+    if (iseq.val()) {
+      menuRef = menusRef.child(_.first(_.keys(iseq.val())))
+    } else {
+      menuRef = await menusRef.push({name: menu})
+    }
+    return await menuRef.child('users').push(me)
+  },
 }
 
 export const VotePageActions = {

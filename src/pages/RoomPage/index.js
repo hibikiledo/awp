@@ -163,20 +163,21 @@ class RoomPage extends Component {
   }
 
   render() {
-    if (!this.props.me) {
-      return this.renderSetName()
-    } else if (this.props.me && this.props.room) {
-      return (
-        <div>
-          <StatusBar
-            states={states}
-            currentState={this.state.roomState}
-            remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
-        </div>
-      )
-    } else {
-      return null
-    }
+    return <OrderPage />;
+    // if (!this.props.me) {
+    //   return this.renderSetName()
+    // } else if (this.props.me && this.props.room) {
+    //   return (
+    //     <div>
+    //       <StatusBar
+    //         states={states}
+    //         currentState={this.state.roomState}
+    //         remainingTime={this.state.remainingTime}/> {this.getPage(this.state.roomState)}
+    //     </div>
+    //   )
+    // } else {
+    //   return null
+    // }
   }
 }
 

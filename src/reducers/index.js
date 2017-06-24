@@ -7,6 +7,9 @@ import _ from 'lodash'
 export default combineReducers({
     firebase: firebaseReducer,
     router: routerReducer,
+    roomPin: handleActions({
+        SET_ROOM_PIN: (currentRoom, action) => action.payload
+    }, null),
     room: handleActions({
         SET_ROOM: (room, action) => action.payload
     }, null),
@@ -37,6 +40,20 @@ export default combineReducers({
             return top
         }
     }, null),
+    menus: handleActions({
+        SET_ROOM: (prevMenus, action) => {
+            const menu = _.get(action, 'payload.menus')
+            if (!menu) {
+                return prevMenus
+            }
+
+            // const users = menu.users
+            // const groupedUsers = _.groupBy(users, (u) => u)
+            // menu.groupedUsers = groupedUsers
+
+            return menu
+        }
+    }, []),
     toasts: handleActions({
         ADD_TOAST: (toasts, action) => [...toasts, action.payload],
         DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
