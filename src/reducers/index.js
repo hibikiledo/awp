@@ -4,7 +4,7 @@ import firebaseReducer from './firebaseReducer'
 import { handleActions } from 'redux-actions'
 import { routerReducer } from 'react-router-redux'
 
-export default combineReducers({
+const appReducer = combineReducers({
     firebase: firebaseReducer,
     router: routerReducer,
     roomPin: handleActions({
@@ -35,7 +35,7 @@ export default combineReducers({
             if (!top) {
                 return top
             }
-            
+
             top.voterNames = _.keys(top.votes)
             return top
         }
@@ -82,3 +82,10 @@ export default combineReducers({
         CLOSE_RESTAURANT_SEARCH_BOX: (__, action) => false,
     }, false)
 })
+
+export default (state, action) => {
+    if (action.type === 'RESET_APP') {
+        state = undefined
+    }
+    return appReducer(state, action)
+}

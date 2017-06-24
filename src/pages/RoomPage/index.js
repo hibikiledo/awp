@@ -79,9 +79,7 @@ class RoomPage extends Component {
   }
 
   componentWillUnmount() {
-    this
-      .props
-      .disconnectChat()
+    this.props.disconnectChat()
     clearInterval(this.timerId)
   }
 

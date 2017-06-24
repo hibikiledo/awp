@@ -23,14 +23,14 @@ function Toast({ toasts }) {
                 <div
                     key={idx}
                     style={{
-                    padding: '12px',
-                    fontFamily: 'Roboto, Arial',
-                    background: '#444',
-                    color: 'white',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    fontSize: '18px',
-                }}>{msg}</div>
+                        padding: '12px',
+                        fontFamily: 'Roboto, Arial',
+                        background: '#444',
+                        color: 'white',
+                        fontWeight: 'bold',
+                        textAlign: 'center',
+                        fontSize: '18px',
+                    }}>{msg}</div>
             ))}
         </div>
     )
@@ -42,9 +42,10 @@ const ConnectedToast = connect(({ toasts }) => ({
 
 
 const AppNavBar = connect(
-    ({roomPin}) => ({showCopy: roomPin, title: 'WeEat ❤︎' }), 
+    ({ roomPin }) => ({ showCopy: roomPin, title: 'WeEat ❤︎' }),
     (dispatch) => ({
-        onCopyIconClick: () => dispatch(AppActions.copyLink())
+        onCopyIconClick: () => dispatch(AppActions.copyLink()),
+        onAppIconClick: () => dispatch(AppActions.resetApp())
     })
 )(NavBar)
 
@@ -56,7 +57,7 @@ export default class AppRoute extends React.Component {
                     <AppNavBar />
                 </nav>
                 <Route path="/" render={() => (
-                  <ConnectedToast />
+                    <ConnectedToast />
                 )} />
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/create" component={CreateRoomPage} />

@@ -64,6 +64,10 @@ export const ChatActions = {
 }
 
 export const AppActions = {
+  resetApp: () => (dispatch, getState, firebase) => {
+    dispatch(createAction('RESET_APP')())
+    dispatch(push('/'))
+  },
   setRoom: createAction('SET_ROOM'),
   setRoomPin: createAction('SET_ROOM_PIN'),
   addToast: (msg) => (dispatch, getState) => {
