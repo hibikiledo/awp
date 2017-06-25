@@ -6,8 +6,8 @@ import {push} from 'react-router-redux'
 let currentChatRoomRef = null
 let subscribed = []
 function fbSubsc(path, cb) {
-  let sub = path.on('value', cb)
-  subscribed.push(sub)
+  path.on('value', cb)
+  subscribed.push(path)
 }
 
 function isBlank(s) {
