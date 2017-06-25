@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 
 import AddMenu from '../../../../components/AddMenu'
 import BorderdNumericInput from '../../../../components/BorderdNumericInput'
+import ChosenServicePerson from '../../../../components/ChosenServicePerson';
 import FormGroup from '../../../../components/FormGroup'
+import PageContainer from '../../../../components/PageContainer';
+import PageSection from '../../../../components/PageSection';
 import ListItem from '../../../../components/ListItem'
 import {OrderPageActions} from '../../../../actions'
 import PrimaryBtn from '../../../../components/PrimaryBtn'
@@ -27,25 +30,35 @@ class VotePage extends Component {
   }
 
   render() {
-    const {restaurant, addMenu, updateMenu, menus, me} = this.props
+    const {
+      restaurant,
+      addMenu,
+      updateMenu,
+      menus,
+      me,
+      serviceUser
+    } = this.props
     if (!restaurant) {
       return null;
     }
 
     return (
-      <div>
-        <FormGroup>
-          <div className="restaurant-info full-width">
-            <FormGroup>
-              <RestaurantDisplayWithVoters
-                restaurantName={restaurant.name}
-                imageUrl={restaurant.imageUrl}
-                voters={restaurant.voterNames}/>
-            </FormGroup>
-          </div>
-        </FormGroup>
-        <AddMenu onAddMenu={addMenu}/>
-        <div>
+      <PageContainer top="110px" center={false}>
+        <PageSection padding={false}>
+          <FormGroup>
+            <div className="restaurant-info full-width">
+              <FormGroup>
+                <RestaurantDisplayWithVoters
+                  restaurantName={restaurant.name}
+                  imageUrl={restaurant.imageUrl}
+                  voters={restaurant.voterNames}/>
+              </FormGroup>
+              <ChosenServicePerson/>
+            </div>
+          </FormGroup>
+          <AddMenu onAddMenu={addMenu}/>
+        </PageSection>
+        <PageSection padding={false} scroll>
           {menus && menus.map((m, i) => <ListItem
             key={i}
             title={m.name}
@@ -69,23 +82,16 @@ class VotePage extends Component {
                 return sum;
               }, 0)
           } />}/>)
-}
-        </div>
-        <div
-          style={{
-          position: 'fixed',
-          bottom: 0,
-          right: 0,
-          left: 0,
-          padding: '8px'
-        }}>
-          <PrimaryBtn onClick={this.props.endOrder}>
+        }
+        </PageSection>
+        <PageSection padding={false}>
+          {me === serviceUser && <PrimaryBtn onClick={this.props.endOrder}>
             End Ordering
-          </PrimaryBtn>
-        </div>
-      </div>
+          </PrimaryBtn>}
+        </PageSection>
+      </PageContainer>
     )
   }
 }
 
-export default withRouter(connect(({topRestaurant, menus, me}) => ({restaurant: topRestaurant, menus, me}), (dispatch) => bindActionCreators(OrderPageActions, dispatch))(VotePage))
+export default withRouter(connect(({topRestaurant, menus, me, serviceUser}) => ({restaurant: topRestaurant, menus, me, serviceUser}), (dispatch) => bindActionCreators(OrderPageActions, dispatch))(VotePage))

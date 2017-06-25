@@ -4,6 +4,11 @@ import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
 
 let currentChatRoomRef = null
+let subscribed = []
+function fbSubsc(path, cb) {
+  path.on('value', cb)
+  subscribed.push(path)
+}
 
 function isBlank(s) {
   return _.isString(s) ? !_.trim(s) : _.isEmpty(s)
@@ -39,7 +44,12 @@ export const ChatActions = {
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
-      dispatch(createAction('CHAT_MESSAGES')(s.val() || []))
+      const me = getState().me
+      const payload = {
+        me,
+        messages: s.val() || []
+      }
+      dispatch(createAction('CHAT_MESSAGES')(payload))
     })
   },
   disconnectChat: () => (dispatch, getState) => {
@@ -48,23 +58,34 @@ export const ChatActions = {
     }
     currentChatRoomRef = null
   },
-  sendMessage: (message, name) => (dispatch, getState, firebase) => {
+  sendMessage: (message) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
+      console.error("Chat room subscribe is not active")
+      return;
+    }
+    const state = getState()
+    if (isBlank(state.me)) {
+      console.error("Chat room cannot find active user name")
       return;
     }
     return currentChatRoomRef.push({
       payload: message,
-      name,
+      name: state.me,
       type: "text"
     })
   },
   showChatDialog: () => (dispatch, getState, firebase) => {
-
+    dispatch(createAction("OPEN_CHAT_DIALOG")())
+  },
+  closeChatDialog: () => (dispatch, getState, firebase) => {
+    dispatch(createAction("CLOSE_CHAT_DIALOG")())
   }
 }
 
 export const AppActions = {
   resetApp: () => (dispatch, getState, firebase) => {
+    _.each(subscribed, (s) => s.off())
+    subscribed = []
     dispatch(createAction('RESET_APP')())
     dispatch(push('/'))
   },
@@ -112,22 +133,19 @@ export const LandingPageActions = {
 export const RoomPageActions = {
   subscribeRoom: (pin) => (dispatch, getState, firebase) => {
     let notified = false
-    firebase
-      .database()
-      .ref(`room/${pin}`)
-      .on('value', (s) => {
-        if (!s.val()) {
-          console.error("Room not found")
-          return dispatch(push('/'))
-        }
-        if (notified === false) {
-          pushNotify(`You just join room ${pin}, please enter your name.`)
-          notified = true
-        }
+    fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
+      if (!s.val()) {
+        console.error("Room not found")
+        return dispatch(push('/'))
+      }
+      if (notified === false) {
+        pushNotify(`You just join room ${pin}, please enter your name.`)
+        notified = true
+      }
 
-        dispatch(AppActions.setRoomPin(pin))
-        dispatch(AppActions.setRoom(s.val()))
-      })
+      dispatch(AppActions.setRoomPin(pin))
+      dispatch(AppActions.setRoom(s.val()))
+    })
   },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
     if (isBlank(name)) {
@@ -197,16 +215,29 @@ export const OrderPageActions = {
       return;
     }
 
-    let menuRef = menusRef.child(_.first(_.keys(iseq.val())));
+    const firstKey = _.first(_.keys(iseq.val()));
+    let menuRef = menusRef.child(firstKey);
 
-    menuRef.once('value', (menu) => {
-      const menuValue = menu.val();
-      const currentAmount = _.countBy(_.values(menuValue.users))[me] || 0;
+    menuRef.once('value', (m) => {
+      const menuValue = m.val();
+      const menuAmounts = _.countBy(_.values(menuValue.users));
+      const myCurrentAmount = menuAmounts[me] || 0;
+      const totalAmount = _.sum(_.values(menuAmounts));
       const myKeys = _.keys(_.pickBy(menuValue.users, _.partial(_.isEqual, me)));
-      const diff = currentAmount - updatedAmount;
+      const diff = myCurrentAmount - updatedAmount;
 
-      if (diff === 0) {
-        return;
+      if (totalAmount - diff <= 0) {
+        return menusRef
+          .child(firstKey)
+          .set(null)
+          .then(() => dispatch({
+            type: 'REMOVE_MENU',
+            payload: {
+              menuName: menu
+            }
+          }));
+      } else if (diff === 0) {
+        return
       } else if (diff > 0) {
         const diffKeys = myKeys.splice(0, diff);
         diffKeys.forEach(key => menuRef.child('users/' + key).set(null));
@@ -214,19 +245,15 @@ export const OrderPageActions = {
         const a = new Array(Math.abs(diff)).fill(1);
         a.forEach(() => menuRef.child('users').push(me));
       }
+      
     })
   },
   endOrder: () => (dispatch, getState, firebase) => {
-    const { roomPin, topRestaurant } = getState()
-    const users = _.keys(topRestaurant.votes)
-    const unluckyUser = users[_.random(0, users.length)]
+    const { roomPin } = getState()
     firebase
       .database()
       .ref(`room/${roomPin}/lockMenu`)
       .set(true)
-      .then(() => {
-        firebase.database().ref(`room/${roomPin}/unluckyUser`).set(unluckyUser)
-      })
   }
 }
 

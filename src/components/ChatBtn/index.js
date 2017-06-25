@@ -7,6 +7,10 @@ import chatIcon from './images/chatHead.png';
 
 export default function ChatButton({ onChatIconClick }) {
   return (
-    <img className="chat-btn" src={chatIcon} onClick={() => onChatIconClick()}/>
+    <img className="chat-btn" src={chatIcon} onClick={(e) => {
+      e.preventDefault();
+      e.stopPropagation()
+      onChatIconClick()
+    }} />
   );
 }

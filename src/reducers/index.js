@@ -65,6 +65,9 @@ const appReducer = combineReducers({
             })
 
             return _.filter(mappedResult, (menu) => _.get(menu, 'total', 0))
+        },
+        REMOVE_MENU: (prevMenus, action) => {
+            return _.filter(prevMenus, m => !_.partial(_.isEqual, _.get(action, 'payload.menuName'))(m));
         }
     }, []),
     toasts: handleActions({
@@ -72,7 +75,9 @@ const appReducer = combineReducers({
         DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
     }, []),
     chat: handleActions({
-        CHAT_MESSAGES: (chat, action) => action.payload
+        CHAT_MESSAGES: (chat, action) => {
+            return _.map(action.payload.messages, m => ({flag: m.name === action.payload.me, ...m}))
+        }
     }, null),
     me: handleActions({
         SET_ME: (me, action) => action.payload
@@ -80,7 +85,23 @@ const appReducer = combineReducers({
     restaurantSearchBoxOpen: handleActions({
         OPEN_RESTAURANT_SEARCH_BOX: (__, action) => true,
         CLOSE_RESTAURANT_SEARCH_BOX: (__, action) => false,
-    }, false)
+    }, false),
+    chatDialogShow: handleActions({
+        OPEN_CHAT_DIALOG: (__, action) => true,
+        CLOSE_CHAT_DIALOG: (__, action) => false,
+    }, false),
+    serviceUser: handleActions({
+        SET_ROOM: (serviceUser, action) => {
+            console.log('srvUser')
+            const room = action.payload
+            if (room && room.users) {
+                const userKey = _.keys(room.users).sort()[0]
+                return room.users[userKey]
+            } else {
+                return serviceUser
+            }
+        }
+    }, null)
 })
 
 export default (state, action) => {

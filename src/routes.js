@@ -1,15 +1,16 @@
 import './styles/global.css'
 
+import { AppActions, ChatActions } from './actions'
+
+import ChatContainer from './components/ChatContainer'
 import CreateRoomPage from './pages/CreateRoomPage'
 import LandingPage from './pages/LandingPage';
 import NavBar from './components/NavBar';
 import React from 'react';
 import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
-import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux'
-import { AppActions, ChatActions } from './actions'
-import ChatContainer from './components/ChatContainer'
+import { connect } from 'react-redux';
 
 function Toast({ toasts }) {
     return (
@@ -42,7 +43,7 @@ const ConnectedToast = connect(({ toasts }) => ({
 }))(Toast)
 
 const ConnectedChatContainer = connect(
-    ({chat}) => ({chat}),
+    ({chat, chatDialogShow}) => ({chat, chatDialogShow}),
     (dispatch) => bindActionCreators(ChatActions, dispatch)
 )(ChatContainer)
 
@@ -62,9 +63,7 @@ export default class AppRoute extends React.Component {
                 <nav className="full-width">
                     <AppNavBar />
                 </nav>
-                <Route path="/" render={() => (
-                    <ConnectedToast />
-                )} />
+                <Route path="/" component={ConnectedToast} />
                 <Route path="/" component={ConnectedChatContainer} />
                 <Route exact path="/" component={LandingPage} />
                 <Route exact path="/create" component={CreateRoomPage} />

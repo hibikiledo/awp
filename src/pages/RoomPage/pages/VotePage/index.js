@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 
 import PropTypes from 'prop-types';
 import RestaurantWithVoters from '../../../../components/RestaurantWithVoters'
+import PageContainer from '../../../../components/PageContainer';
+import PageSection from '../../../../components/PageSection';
 import {VotePageActions} from '../../../../actions'
 import _ from 'lodash';
 import {bindActionCreators} from 'redux'
@@ -18,7 +20,8 @@ function VotePage({me, room, match, voteForRestaurant}) {
     .reduce(_.add, 0)
 
   return (
-    <div>
+    <PageContainer top="110px" center={false}>
+        <PageSection padding={false} scroll>
       {_
         .keys(room.restaurants)
         .map((key, idx) => {
@@ -41,7 +44,8 @@ function VotePage({me, room, match, voteForRestaurant}) {
             </div>
           )
         })}
-    </div>
+        </PageSection>
+    </PageContainer>
   )
 }
 

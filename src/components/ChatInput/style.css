@@ -1,6 +1,6 @@
 .chat-bottom {
   height: 35px;
-  padding: 8px 16px 8px 16px;
+  padding: 8px 16px;
 }
 
 .send-btn {
@@ -8,16 +8,17 @@
   width: 30px;
   height: 30px;
   cursor: pointer;
-  padding: 5px;
+  padding: 5px 0px 5px 5px;
 }
 
 .chat-input {
   padding-left: 15px;
   float: left;
-  width: 289px;
+  /*width: 289px;*/
   height: 35px;
   border-radius: 4px;
   border: solid 1px #979797;
+  flex: 1
 }
 
 .chat-input::placeholder {

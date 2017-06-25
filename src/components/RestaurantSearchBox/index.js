@@ -4,7 +4,9 @@ import React, {Component} from 'react';
 
 import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
-import {debounce} from 'lodash';
+import PageContainer from '../PageContainer';
+import PageSection from '../PageSection';
+import {partial,debounce} from 'lodash';
 import searchIcon from './images/search.png';
 
 const RestaurantSearchListItem = ({restaurantName, onSelect}) => (
@@ -45,12 +47,35 @@ class RestaurantSearchInput extends Component {
 
 class RestaurantSearchAPI {
   searchByKeyword(keyword) {
+     if (!navigator.geolocation) {
+       return this.callSearchApi(keyword);
+    } else {
+       return this.getCurrentPosition()
+        .then(partial(this.callSearchApi.bind(this), keyword));
+    } 
+  }
+  getCurrentPosition() {
+    return new Promise(function (resolve) {
+      navigator.geolocation.getCurrentPosition(resolve);
+    })
+  }
+  callSearchApi(keyword, position) {
+    // position.coords.latitude + "," + position.coords.longitude
+    let location, radius;
+
+    if (position) {
+      location = new global.google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      radius = 10e3;
+    }
+
     return new Promise((resolve, reject) => {
-      window
+      global
         .placesService
         .textSearch({
           query: keyword,
-          type: 'restaurant'
+          type: 'restaurant',
+          location,
+          radius
         }, resolve)
     }).then(result => result ? result.map(p => this.googlePlaceToRestaurant(p)) : []);
   }
@@ -70,20 +95,20 @@ class RestaurantSearchAPI {
 }
 
 export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants}) => (
-  <div>
-    <div>
+  <PageContainer center={false}>
+    <PageSection>
       <RestaurantSearchInput
         keyword={keyword}
         onChange={onChange}
         onSelect={onSelect}/>
-    </div>
-    <div>
+    </PageSection>
+    <PageSection flex="1" scroll>
       {restaurants.map((r, i) => <RestaurantSearchListItem
         key={i}
         restaurantName={r.name}
         onSelect={() => onSelect(r)}/>)}
-    </div>
-  </div>
+    </PageSection>
+  </PageContainer>
 );
 
 export default class RestaurantSearchBoxContainer extends Component {
