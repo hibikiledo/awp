@@ -63,7 +63,7 @@ const appReducer = combineReducers({
                     total: _.sumBy(countedByName, 'amount')
                 }
             })
-            
+
             return _.filter(mappedResult, (menu) => _.get(menu, 'total', 0))
         },
         REMOVE_MENU: (prevMenus, action) => {
@@ -95,7 +95,8 @@ const appReducer = combineReducers({
             console.log('srvUser')
             const room = action.payload
             if (room && room.users) {
-                return _.keys(room.users).sort()[0]
+                const userKey = _.keys(room.users).sort()[0]
+                return room.users[userKey]
             } else {
                 return serviceUser
             }
