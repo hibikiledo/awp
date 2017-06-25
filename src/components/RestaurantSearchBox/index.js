@@ -4,6 +4,8 @@ import React, {Component} from 'react';
 
 import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
+import PageContainer from '../PageContainer';
+import PageSection from '../PageSection';
 import {debounce} from 'lodash';
 import searchIcon from './images/search.png';
 
@@ -46,7 +48,7 @@ class RestaurantSearchInput extends Component {
 class RestaurantSearchAPI {
   searchByKeyword(keyword) {
     return new Promise((resolve, reject) => {
-      window
+      global
         .placesService
         .textSearch({
           query: keyword,
@@ -70,20 +72,20 @@ class RestaurantSearchAPI {
 }
 
 export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants}) => (
-  <div>
-    <div>
+  <PageContainer center={false}>
+    <PageSection>
       <RestaurantSearchInput
         keyword={keyword}
         onChange={onChange}
         onSelect={onSelect}/>
-    </div>
-    <div>
+    </PageSection>
+    <PageSection flex="1" scroll>
       {restaurants.map((r, i) => <RestaurantSearchListItem
         key={i}
         restaurantName={r.name}
         onSelect={() => onSelect(r)}/>)}
-    </div>
-  </div>
+    </PageSection>
+  </PageContainer>
 );
 
 export default class RestaurantSearchBoxContainer extends Component {
