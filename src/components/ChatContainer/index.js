@@ -10,13 +10,12 @@ export default (props) => {
   if (chat === null) {
     return null
   }
-
+  const classExpanded = chatDialogShow ? "expanded": "collapsed"
   return (
-    <div className={`chatContainer ${chatDialogShow ? "expanded": ""}`} onClick={closeChatDialog}>
-      <div className="chatWrapper" onClick={(e) => {e.stopPropagation(); e.preventDefault()}}>
-      { chatDialogShow ? <ChatBox messages={chat} {...props} />
-        : <ChatBtn onChatIconClick={showChatDialog} />
-      }
+    <div className={`chatContainer ${classExpanded}`} onClick={closeChatDialog}>
+      <div className={`chatWrapper ${classExpanded}`} onClick={(e) => {e.stopPropagation(); e.preventDefault()}}>
+        { !chatDialogShow && <ChatBtn onChatIconClick={showChatDialog} /> }
+        <ChatBox messages={chat} {...props} />
       </div>
     </div>
   )
