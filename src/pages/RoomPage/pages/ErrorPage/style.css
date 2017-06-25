@@ -1,0 +1,44 @@
+.error-messages-section > .title {
+	line-height: 73px;
+	font-family: Roboto, Arial;
+	font-size: 62px;
+	font-weight: 900;
+	text-align: center;
+	color: #e21a00;
+  margin-bottom: 26px;
+  padding: 0 16px;
+}
+
+.error-messages-section > .description {
+	line-height: 28px;
+	font-family: Roboto, Arial;
+	font-size: 24px;
+	font-weight: 900;
+	color: #424242;
+  padding: 0 16px;
+}
+
+.create-room-button {
+  cursor: pointer;
+  margin-bottom: 40px;
+}
+
+.create-room-button > .title {
+	font-family: Roboto, Arial;
+	font-size: 24px;
+	font-weight: 900;
+	text-align: center;
+	color: #424242;
+}
+
+.create-room-button > .title:hover {
+  text-decoration: underline;
+}
+
+.create-room-button > .description {
+	line-height: 16px;
+	font-family: Roboto, Arial;
+	font-size: 14px;
+	text-align: center;
+	color: #424242;
+}
