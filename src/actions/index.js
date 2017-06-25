@@ -137,7 +137,7 @@ export const LandingPageActions = {
           Rooms.updateRoom(pin, val)
           dispatch(AppActions.setRoom(val))
           dispatch(AppActions.setRoomPin(pin))
-          dispatch(createAction('LOADING_END'))
+          dispatch(createAction('LOADING_END')())
           dispatch(push('/r/' + pin));
         } else {
           dispatch(AppActions.addToast('Invalid Pin'))
@@ -212,7 +212,7 @@ export const RoomPageActions = {
 
     if (!getState().firebaseConnected) {
       dispatch(AppActions.setMe(name))
-      dispatch(createAction('LOADING_END'))
+      dispatch(createAction('LOADING_END')())
       dispatch(ChatActions.joinOrCreateChatRoom(roomId))
     }
     firebase
