@@ -111,10 +111,15 @@ export const LandingPageActions = {
     if (isBlank(pin)) {
       return dispatch(AppActions.addToast("Pin cannot empty"))
     }
+
+    dispatch(createAction('LOADING_START'));
+
     firebase
       .database()
       .ref(`room/${pin}`)
       .once('value', (s) => {
+        dispatch(createAction('LOADING_END'));
+
         const val = s.val()
         if (val) {
           dispatch(AppActions.setRoom(val))
@@ -127,6 +132,38 @@ export const LandingPageActions = {
   },
   navigateToCreateRoomPage: () => (dispatch, getState, firebase) => {
     dispatch(push('/create'))
+  }
+}
+
+const generateRoomID = async function() {
+  for (let i = 0; i < 99999; i++) {
+    let tempID = _.padStart(_.random(0, 99999), 5, '0');
+    // let tempID = '53096'
+    let existRoom = await global.firebase.database().ref(`room/${tempID}`).once('value');
+    console.log(`Checked room ${tempID}, value=${existRoom.val()}`)
+    if (!existRoom.val()) {
+      return tempID;
+    }
+  }
+}
+
+export const CreateRoomPageActions = {
+  createRoom: (roomName, nominateTime) => async (dispatch, getState, firebase) => {
+    const roomCfg = {
+      name: roomName,
+      nominateTime: nominateTime,
+      startTime: new Date().getTime()
+    }
+    let roomId = await generateRoomID()
+    console.log("ROOM ID:", roomId)
+
+    let newRoom = firebase.database()
+      .ref('room/' + roomId)
+      .set(roomCfg);
+
+    dispatch(push(`r/${roomId}`))
+    console.log('create room in firebase')
+
   }
 }
 
@@ -152,11 +189,15 @@ export const RoomPageActions = {
       return dispatch(AppActions.addToast("Name cannot be blank"))
     }
     name = _.trim(name)
+
+    dispatch(createAction('LOADING_START'));
+
     firebase
       .database()
       .ref(`room/${roomId}/users`)
       .push(name)
       .then(() => {
+        dispatch(createAction('LOADING_END'))
         dispatch(AppActions.setMe(name))
         dispatch(ChatActions.joinOrCreateChatRoom(roomId))
       })

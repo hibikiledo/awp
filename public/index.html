@@ -10,7 +10,6 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,900" rel="stylesheet">
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -26,6 +25,20 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+    <script>
+      WebFontConfig = {
+        google: {
+          families: ['Roboto:400,500,900']
+        }
+      }
+      function loadWebFont(d) {
+        var wf = d.createElement('script'), s = d.scripts[0];
+        wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js';
+        wf.async = true;
+        s.parentNode.insertBefore(wf, s);
+      }
+      loadWebFont(document)
+    </script>
     <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
     <script>
       // Initialize Firebase

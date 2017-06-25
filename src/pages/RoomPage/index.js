@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import FormGroup from '../../components/FormGroup'
 import FormSection from '../../components/FormSection'
 import OrderPage from './pages/OrderPage'
-import Orderpage from './pages/OrderPage'
+import ErrorPage from './pages/ErrorPage'
 import PageContainer from '../../components/PageContainer'
 import PrimaryBtn from '../../components/PrimaryBtn';
 import RestaurantPage from './pages/RestaurantPage'
@@ -95,6 +95,12 @@ class RoomPage extends Component {
         clearInterval(this.timerId)
       }
 
+      const hasRestaurants = room.restaurants && _.values(room.restaurants).length > 0;
+
+      if (!hasRestaurants && roomState !== 'Nominate') {
+        roomState = 'Error';
+      }
+
       return { roomState, remainingTime }
   }
 
@@ -154,6 +160,8 @@ class RoomPage extends Component {
         return <OrderPage/>;
       case 'Summary':
         return <SummaryPage/>;
+      case 'Error':
+        return <ErrorPage/>;
     }
   }
 
@@ -164,10 +172,10 @@ class RoomPage extends Component {
     } else if (this.props.me && this.props.room) {
       return (
         <div>
-          <StatusBar
+          {this.state.roomState !== 'Error' && <StatusBar
             states={states}
             currentState={this.state.roomState}
-            remainingTime={this.state.remainingTime}/> 
+            remainingTime={this.state.remainingTime}/>}
           {this.getPage(this.state.roomState)}
         </div>
       )
@@ -177,4 +185,7 @@ class RoomPage extends Component {
   }
 }
 
-export default connect(({me, room}) => ({me, room}), (dispatch) => bindActionCreators(_.extend({}, RoomPageActions, ChatActions), dispatch),)(RoomPage)
+export default connect(
+  ({me, room}) => ({me, room}), 
+  (dispatch) => bindActionCreators(_.extend({}, RoomPageActions, ChatActions), dispatch),
+)(RoomPage)
