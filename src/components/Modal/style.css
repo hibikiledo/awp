@@ -21,4 +21,5 @@
   right: 16px;
   top: 16px;
   cursor: pointer;
+  max-height: 36px;
 }

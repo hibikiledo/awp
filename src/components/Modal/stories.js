@@ -6,5 +6,7 @@ import {storiesOf} from '@storybook/react';
 storiesOf('<Modal />')
     .addDecorator(host({width: '400px'}))
     .add('default', () => (
-        <Modal title="WeEat" />
+        <Modal 
+            title="WeEat"
+            open={true} />
     ));

@@ -3,6 +3,7 @@ import './style.css'
 import React, { Component } from 'react';
 
 import PropTypes from 'prop-types';
+import closeIcon from './images/close.png';
 
 export default function Modal({
   open,
@@ -13,7 +14,7 @@ export default function Modal({
   return (
     <div className="modal">
       <div className="body">
-        <span className="close-icon" onClick={onCloseIconClick}>X</span>
+        <img className="close-icon" src={closeIcon} onClick={onCloseIconClick} />
         { children }
       </div>
     </div>
