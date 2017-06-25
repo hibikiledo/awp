@@ -112,13 +112,13 @@ export const LandingPageActions = {
       return dispatch(AppActions.addToast("Pin cannot empty"))
     }
 
-    dispatch(createAction('LOADING_START'));
+    dispatch(createAction('LOADING_START')());
 
     firebase
       .database()
       .ref(`room/${pin}`)
       .once('value', (s) => {
-        dispatch(createAction('LOADING_END'));
+        dispatch(createAction('LOADING_END')());
 
         const val = s.val()
         if (val) {
@@ -149,6 +149,8 @@ const generateRoomID = async function() {
 
 export const CreateRoomPageActions = {
   createRoom: (roomName, nominateTime) => async (dispatch, getState, firebase) => {
+    dispatch(createAction('LOADING_START')());
+    
     const roomCfg = {
       name: roomName,
       nominateTime: nominateTime,
@@ -160,6 +162,8 @@ export const CreateRoomPageActions = {
     let newRoom = firebase.database()
       .ref('room/' + roomId)
       .set(roomCfg);
+
+    dispatch(createAction('LOADING_END')());
 
     dispatch(push(`r/${roomId}`))
     console.log('create room in firebase')
@@ -190,14 +194,14 @@ export const RoomPageActions = {
     }
     name = _.trim(name)
 
-    dispatch(createAction('LOADING_START'));
+    dispatch(createAction('LOADING_START')());
 
     firebase
       .database()
       .ref(`room/${roomId}/users`)
       .push(name)
       .then(() => {
-        dispatch(createAction('LOADING_END'))
+        dispatch(createAction('LOADING_END')())
         dispatch(AppActions.setMe(name))
         dispatch(ChatActions.joinOrCreateChatRoom(roomId))
       })

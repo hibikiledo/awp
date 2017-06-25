@@ -5,6 +5,7 @@ import { AppActions, ChatActions } from './actions'
 import ChatContainer from './components/ChatContainer'
 import CreateRoomPage from './pages/CreateRoomPage'
 import LandingPage from './pages/LandingPage';
+import LoadingOverlay from './components/LoadingOverlay';
 import NavBar from './components/NavBar';
 import React from 'react';
 import RoomPage from './pages/RoomPage';
@@ -56,6 +57,10 @@ const AppNavBar = connect(
     })
 )(NavBar)
 
+const AppLoadingPage = connect(
+    ({ isLoading }) => ({ isLoading })
+)(LoadingOverlay);
+
 export default class AppRoute extends React.Component {
     render() {
         return (
@@ -63,6 +68,7 @@ export default class AppRoute extends React.Component {
                 <nav className="full-width">
                     <AppNavBar />
                 </nav>
+                <AppLoadingPage />
                 <Route path="/" component={ConnectedToast} />
                 <Route path="/" component={ConnectedChatContainer} />
                 <Route exact path="/" component={LandingPage} />
