@@ -10,7 +10,7 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,900" rel="stylesheet">
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -41,16 +41,13 @@
     </script>
     <div id="root"></div>
     <div id="map" style="display:none"></div>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBCNZzqHHJyaWFVmHPISaTO1E76y2DE8c&libraries=geometry,places"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBBCNZzqHHJyaWFVmHPISaTO1E76y2DE8c&libraries=geometry,places" async defer></script>
     <script>
       var map;
-
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'));
-
         placesService = new google.maps.places.PlacesService(map);
       }
-
       initMap();
     </script>
     <!--
