@@ -50,7 +50,7 @@ const ConnectedChatContainer = connect(
 
 
 const AppNavBar = connect(
-    ({ roomPin }) => ({ showCopy: roomPin, title: 'WeEat ❤︎' }),
+    ({ roomPin, room }) => ({ showCopy: roomPin, title: room ? room.name : 'WeEat ❤︎' }),
     (dispatch) => ({
         onCopyIconClick: () => dispatch(AppActions.copyLink()),
         onAppIconClick: () => dispatch(AppActions.resetApp())
