@@ -1,8 +1,7 @@
 import './style.css'
-import loadingImg from './images/loading.gif';
+import loadingImg from './images/loading.png';
 import React from 'react';
 import PageContainer from '../PageContainer'
-import PageSection from '../PageSection'
 
 export default({isLoading}) => (
   <div
