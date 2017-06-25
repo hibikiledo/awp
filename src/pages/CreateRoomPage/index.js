@@ -33,7 +33,11 @@ class CreateRoomPage extends Component {
           <SettingListItem
             option="Nominate Time"
             explanation="Minutes"
-            control={< NumericInput onChange={(value) => this.setState({ nominateTime: value })} value={this.state.nominateTime} min={1} />} />
+            control={< NumericInput onChange={(value) => this.setState({ nominateTime: value })} 
+            value={this.state.nominateTime} 
+            min={1}
+            max={10}
+          />} />
         </div>
         <PrimaryButton
           onClick={() => this.props.createRoom(this.state.roomName, this.state.nominateTime)}>CREATE</PrimaryButton>
