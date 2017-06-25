@@ -29,14 +29,14 @@
     }
     100% {
       left: 0;
-      right: 30px;
+      right: 40px;
     }
 }
 
 @keyframes chatWrapperAnimOut {
     0% {
       left: 0;
-      right: 30px;
+      right: 40px;
     }
     100% {
       right: 100%;
@@ -69,7 +69,7 @@
 .chatWrapper {
   position: absolute;
   left: 0;
-  right: 30px;
+  right: 40px;
   top: 0;
   bottom: 0;
   background: #fff;
