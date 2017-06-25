@@ -38,6 +38,7 @@
 }
 
 .restarant-vote .black-box {
+    cursor: pointer;
     background-color: rgba(0, 0, 0, 0.55);
     height: 36px;
     border-radius: 2px;
