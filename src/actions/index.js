@@ -121,6 +121,7 @@ export const LandingPageActions = {
         const room = await Rooms.findRoom(pin)
         dispatch(AppActions.setRoom(room))
         dispatch(AppActions.setRoomPin(pin))
+        dispatch(createAction('LOADING_END')());
         dispatch(push('/r/' + pin));
       } catch(e) {
         dispatch(AppActions.addToast('[Offline] Invalid Pin'))
