@@ -210,7 +210,8 @@ module.exports = {
                 },
               ],
             },
-            extractTextPluginOptions
+            extractTextPluginOptions,
+            { allChunks: true }
           )
         ),
         // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
