@@ -2,12 +2,14 @@ import _ from 'lodash'
 import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
+import {chats, Rooms} from './db'
 
 let currentChatRoomRef = null
 let subscribed = []
-function fbSubsc(path, cb) {
-  path.on('value', cb)
+async function fbSubsc(path, cb) {
+  let result = path.on('value', cb)
   subscribed.push(path)
+  return await result
 }
 
 function isBlank(s) {
@@ -107,13 +109,23 @@ export const AppActions = {
 }
 
 export const LandingPageActions = {
-  tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
+  tryJoinRoomWithPin: (pin) => async (dispatch, getState, firebase) => {
     if (isBlank(pin)) {
       return dispatch(AppActions.addToast("Pin cannot empty"))
     }
 
     dispatch(createAction('LOADING_START')());
 
+    if (!getState().firebaseConnected) {
+      try {
+        const room = await Rooms.findRoom(pin)
+        dispatch(AppActions.setRoom(room))
+        dispatch(AppActions.setRoomPin(pin))
+        dispatch(push('/r/' + pin));
+      } catch(e) {
+        dispatch(AppActions.addToast('[Offline] Invalid Pin'))
+      }
+    }
     firebase
       .database()
       .ref(`room/${pin}`)
@@ -122,8 +134,10 @@ export const LandingPageActions = {
 
         const val = s.val()
         if (val) {
+          Rooms.updateRoom(pin, val)
           dispatch(AppActions.setRoom(val))
           dispatch(AppActions.setRoomPin(pin))
+          dispatch(createAction('LOADING_END'))
           dispatch(push('/r/' + pin));
         } else {
           dispatch(AppActions.addToast('Invalid Pin'))
@@ -172,9 +186,9 @@ export const CreateRoomPageActions = {
 }
 
 export const RoomPageActions = {
-  subscribeRoom: (pin) => (dispatch, getState, firebase) => {
+  subscribeRoom: (pin) => async (dispatch, getState, firebase) => {
     let notified = false
-    fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
+    return await fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
       if (!s.val()) {
         console.error("Room not found")
         return dispatch(push('/'))
@@ -183,7 +197,7 @@ export const RoomPageActions = {
         pushNotify(`You just join room ${pin}, please enter your name.`)
         notified = true
       }
-
+      Rooms.updateRoom(pin, s.val())
       dispatch(AppActions.setRoomPin(pin))
       dispatch(AppActions.setRoom(s.val()))
     })
@@ -196,6 +210,11 @@ export const RoomPageActions = {
 
     dispatch(createAction('LOADING_START')());
 
+    if (!getState().firebaseConnected) {
+      dispatch(AppActions.setMe(name))
+      dispatch(createAction('LOADING_END'))
+      dispatch(ChatActions.joinOrCreateChatRoom(roomId))
+    }
     firebase
       .database()
       .ref(`room/${roomId}/users`)

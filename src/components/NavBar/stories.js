@@ -6,5 +6,13 @@ import {storiesOf} from '@storybook/react';
 storiesOf('<NavBar />')
     .addDecorator(host({width: '400px'}))
     .add('default', () => (
-        <NavBar title="WeEat" />
+        <NavBar 
+            showCopy="23132"
+            title="Eat With Choo Choo"
+             />
+    ))
+    .add('creat room', () => (
+        <NavBar
+            title="Creat Room"
+            />
     ));

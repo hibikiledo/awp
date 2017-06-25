@@ -26,10 +26,13 @@ export default function NavBar({
   return (
     <div className="nav-bar">
       <img className="app-icon left" alt="App Logo" src={circularIcon} onClick={() => onAppIconClick()}/>
-      <span className="title">{title}</span>
       {showCopy ?
-        <img className="action-icon first" src={copyIcon} id="clipboard" onClick={() => onCopyIconClick()}/>
-        : null}
+        <div className="block-nav-bar">
+          <span className="room-pin">{showCopy}&ensp;</span>
+          <span className="room-name">{title}</span>
+          <img className="action-icon" src={copyIcon} id="clipboard" onClick={() => onCopyIconClick()}/>
+        </div>
+        : <span className="title">{title}</span>}
     </div>
   )
 }
