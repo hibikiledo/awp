@@ -101,7 +101,10 @@ const appReducer = combineReducers({
                 return serviceUser
             }
         }
-    }, null)
+    }, null),
+    firebaseConnected: handleActions({
+        FIREBASE_CONNECTED: (connected, action) => action.payload
+    }, false)
 })
 
 export default (state, action) => {
