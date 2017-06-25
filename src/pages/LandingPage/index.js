@@ -3,19 +3,19 @@ import './style.css'
 import React, { Component } from 'react';
 
 import AppLogo from '../../components/AppLogo'
-import PageContainer from '../../components/PageContainer'
-import PageSection from '../../components/PageSection'
-import FormSection from '../../components/FormSection'
-import FormGroup from '../../components/FormGroup'
 import { AppSelectors } from '../../selectors'
 import BorderlessBtn from '../../components/BorderlessBtn'
+import FormGroup from '../../components/FormGroup'
+import FormSection from '../../components/FormSection'
 import { LandingPageActions } from '../../actions'
 import { Link } from 'react-router-dom'
+import PageContainer from '../../components/PageContainer'
+import PageSection from '../../components/PageSection'
 import PrimaryBtn from '../../components/PrimaryBtn'
 import PropTypes from 'prop-types'
+import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import TextInput from '../../components/TextInput'
 import { bindActionCreators } from 'redux'
-import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import { connect } from 'react-redux'
 
 class LandingPage extends Component {
@@ -38,13 +38,15 @@ class LandingPage extends Component {
         </PageSection>
         <FormSection>
           <FormGroup>
-            <TextInput
-              placeholder="Room PIN"
-              value={this.state.pin}
-              type="number"
-              onChange={(e) => {
-              this.setState({ pin: e.target.value })
-            }} />
+            <label for="room-pin">
+              <TextInput
+                aria-label="room pin"
+                value={this.state.pin}
+                type="number"
+                onChange={(e) => {
+                this.setState({ pin: e.target.value })
+              }} />
+            </label>
           </FormGroup>
           <PrimaryBtn onClick={() => {
             this.props.tryJoinRoomWithPin(this.state.pin)
