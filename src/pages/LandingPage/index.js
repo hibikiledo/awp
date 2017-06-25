@@ -38,15 +38,13 @@ class LandingPage extends Component {
         </PageSection>
         <FormSection>
           <FormGroup>
-            <label for="room-pin">
-              <TextInput
-                aria-label="room pin"
-                value={this.state.pin}
-                type="number"
-                onChange={(e) => {
-                this.setState({ pin: e.target.value })
-              }} />
-            </label>
+            <TextInput
+              aria-label="room pin"
+              value={this.state.pin}
+              type="number"
+              onChange={(e) => {
+              this.setState({ pin: e.target.value })
+            }} />
           </FormGroup>
           <PrimaryBtn onClick={() => {
             this.props.tryJoinRoomWithPin(this.state.pin)
