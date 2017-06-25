@@ -3,11 +3,11 @@ import './styles/global.css'
 import { AppActions, ChatActions } from './actions'
 
 import ChatContainer from './components/ChatContainer'
-import CreateRoomPage from './pages/CreateRoomPage'
-import LandingPage from './pages/LandingPage';
+// import CreateRoomPage from './pages/CreateRoomPage'
+// import LandingPage from './pages/LandingPage';
 import NavBar from './components/NavBar';
 import React from 'react';
-import RoomPage from './pages/RoomPage';
+// import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
@@ -56,6 +56,31 @@ const AppNavBar = connect(
     })
 )(NavBar)
 
+function loadLazily(asyncImport) {
+    return class LazyLoader extends React.Component {
+        state = {
+            component: null
+        }
+        componentDidMount() {
+            asyncImport().then((module) => {
+                this.setState({ component: module.default })
+            })
+        }
+        render() {
+            if (!this.state.component) {
+                return null;
+            }
+            const Component = this.state.component
+            return <Component {...this.props} />
+        }
+    }
+}
+
+const LazyLoadLandingPage = loadLazily(() => import('./pages/LandingPage/index.js'))
+const LazyLoadCreateRoomPage = loadLazily(() => import('./pages/CreateRoomPage/index.js'))
+const LazyLoadRoomPage = loadLazily(() => import('./pages/RoomPage/index.js'))
+
+
 export default class AppRoute extends React.Component {
     render() {
         return (
@@ -65,9 +90,9 @@ export default class AppRoute extends React.Component {
                 </nav>
                 <Route path="/" component={ConnectedToast} />
                 <Route path="/" component={ConnectedChatContainer} />
-                <Route exact path="/" component={LandingPage} />
-                <Route exact path="/create" component={CreateRoomPage} />
-                <Route exact path="/r/:id" component={RoomPage} />
+                <Route exact path="/" component={LazyLoadLandingPage}  />
+                <Route exact path="/create" component={LazyLoadCreateRoomPage} />
+                <Route exact path="/r/:id" component={LazyLoadRoomPage}  />
             </div>
         )
     }
