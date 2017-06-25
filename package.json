@@ -8,6 +8,7 @@
     "lodash": "^4.17.4",
     "mocha": "^3.4.2",
     "moment": "^2.18.1",
+    "pouchdb-browser": "^6.2.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.5",
