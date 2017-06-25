@@ -8,6 +8,31 @@ if (process.env.NODE_ENV === "development") {
 export const rooms = new PouchDB("rooms")
 export const chats = new PouchDB("chats")
 
+export const Chats = {
+  findRoom: async (roomPin) => {
+    try {
+      let doc = await chats.get(roomPin)
+      return doc.messages
+    } catch(e) {
+      return null
+    }
+  },
+  findOrCreateChatRoom: async (roomPin) => {
+    try {
+      return await chats.get(roomPin)
+    } catch(e) {
+      return await chats.put({
+        _id: roomPin
+      })
+    }
+  },
+  updateChatRoom: async (roomPin, data) => {
+    let chat = await Chats.findOrCreateChatRoom(roomPin)
+    let toupdate = _.extend({_id: chat._id || chat.id, _rev: chat._rev || chat.rev}, {messages: data})
+    return await chats.put(toupdate)
+  }
+}
+
 export const Rooms = {
   findRoom: async (roomPin) => {
     try {
@@ -30,6 +55,6 @@ export const Rooms = {
     // console.log("UPDATE:", room, data)
     let toupdate = _.extend({_id: room._id || room.id, _rev: room._rev || room.rev}, data)
     // console.log("TOUPDATE:", toupdate)
-    return rooms.put(toupdate)
+    return await rooms.put(toupdate)
   }
 }

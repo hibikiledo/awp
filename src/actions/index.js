@@ -2,7 +2,7 @@ import _ from 'lodash'
 import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
-import {chats, Rooms} from './db'
+import {Chats, Rooms} from './db'
 
 let currentChatRoomRef = null
 let subscribed = []
@@ -40,17 +40,25 @@ export function pushNotify(message) {
 }
 
 export const ChatActions = {
-  joinOrCreateChatRoom: (roomId) => (dispatch, getState, firebase) => {
+  joinOrCreateChatRoom: (roomId) => async (dispatch, getState, firebase) => {
+    if (!getState().firebaseConnected) {
+      let messages = await Chats.findRoom(roomId)
+      const payload = {
+        me: getState().me,
+        messages: messages
+      }
+      dispatch(createAction('CHAT_MESSAGES')(payload))
+    }
     if (currentChatRoomRef !== null) {
       currentChatRoomRef.off()
     }
     currentChatRoomRef = firebase.database().ref(`chat/${roomId}`)
     currentChatRoomRef.on('value', (s) => {
-      const me = getState().me
       const payload = {
-        me,
+        me: getState().me,
         messages: s.val() || []
       }
+      Chats.updateChatRoom(roomId, payload.messages)
       dispatch(createAction('CHAT_MESSAGES')(payload))
     })
   },
@@ -59,6 +67,7 @@ export const ChatActions = {
       currentChatRoomRef.off()
     }
     currentChatRoomRef = null
+    dispatch(createAction('CHAT_MESSAGES')(null))
   },
   sendMessage: (message) => (dispatch, getState, firebase) => {
     if (currentChatRoomRef == null) {
