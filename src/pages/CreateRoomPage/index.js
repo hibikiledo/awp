@@ -10,19 +10,9 @@ import SettingListItem from '../../components/SettingListItem'
 import TextInput from '../../components/TextInput'
 import _ from 'lodash';
 import { connect } from 'react-redux';
+import {bindActionCreators} from 'redux'
 import { push } from 'react-router-redux'
-
-const generateRoomID = async function() {
-  for (let i = 0; i < 99999; i++) {
-    let tempID = _.padStart(_.random(0, 99999), 5, '0');
-    // let tempID = '53096'
-    let existRoom = await global.firebase.database().ref(`room/${tempID}`).once('value');
-    console.log(`Checked room ${tempID}, value=${existRoom.val()}`)
-    if (!existRoom.val()) {
-      return tempID;
-    }
-  }
-}
+import { CreateRoomPageActions } from '../../actions';
 
 class CreateRoomPage extends Component {
   constructor(props, ctx) {
@@ -31,21 +21,6 @@ class CreateRoomPage extends Component {
       roomName: "",
       nominateTime: 5
     }
-  }
-
-  createRoom = async () => {
-    const roomCfg = {
-      name: this.state.roomName,
-      nominateTime: this.state.nominateTime,
-      startTime: new Date().getTime()
-    }
-    let roomId = await generateRoomID()
-    console.log("ROOM ID:", roomId)
-    let newRoom = global.firebase.database()
-      .ref('room/' + roomId)
-      .set(roomCfg);
-    this.props.goToRoom(roomId)
-    console.log('create room in firebase')
   }
 
   render() {
@@ -58,21 +33,19 @@ class CreateRoomPage extends Component {
           <SettingListItem
             option="Nominate Time"
             explanation="Minutes"
-            control={< NumericInput onChange={(value) => this.setState({ nominateTime: value })} value={this.state.nominateTime} min="1" />} />
+            control={< NumericInput onChange={(value) => this.setState({ nominateTime: value })} value={this.state.nominateTime} min={1} />} />
         </div>
         <PrimaryButton
-          onClick={this.createRoom}>CREATE</PrimaryButton>
+          onClick={() => this.props.createRoom(this.state.roomName, this.state.nominateTime)}>CREATE</PrimaryButton>
       </div>
     );
   }
 }
 
 const mapStateToProps = ({ firebase }) => ({ firebase })
-const mapDispatchToProps = function(dispatch) {
-  return {
-    goToRoom: function(roomId) {
-      dispatch(push(`r/${roomId}`))
-    }
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(CreateRoomPage);
+const mapDispatchToProps = (dispatch) => bindActionCreators(CreateRoomPageActions, dispatch);
+
+export default connect(
+  mapStateToProps, 
+  mapDispatchToProps
+)(CreateRoomPage);
