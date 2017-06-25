@@ -1,4 +1,5 @@
 .primary-btn {
+  cursor: pointer;
   box-sizing: border-box;
   border: 1px solid #ff672b;
   padding: 0;

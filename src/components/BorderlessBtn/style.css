@@ -1,4 +1,5 @@
 .borderless-btn {
+  cursor: pointer;
   box-sizing: border-box;
   padding: 0;
   border: 0;

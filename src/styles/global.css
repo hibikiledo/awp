@@ -6,11 +6,35 @@ body {
   margin: 0 -8px
 }
 
+.toast-enter {
+  opacity: 0.01;
+}
+
+.toast-enter.toast-enter-active {
+  opacity: 1;
+  transition: opacity 250ms ease-in;
+}
+
+.toast-leave {
+  opacity: 1;
+}
+
+.toast-leave.toast-leave-active {
+  opacity: 0.01;
+  transition: opacity 150ms ease-in;
+}
+
 @media (min-width: 550px) {
   .wrapper,
   .page-container {
     width: 550px;
     margin: auto;
+  }
+}
+
+@media (max-width: 549px) {
+  .page-container {
+    padding-bottom: 65px;
   }
 }
 

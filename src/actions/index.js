@@ -1,8 +1,9 @@
+import {Chats, Rooms} from './db'
+
 import _ from 'lodash'
 import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
-import {Chats, Rooms} from './db'
 
 let currentChatRoomRef = null
 let subscribed = []
@@ -106,8 +107,9 @@ export const AppActions = {
   setRoom: createAction('SET_ROOM'),
   setRoomPin: createAction('SET_ROOM_PIN'),
   addToast: (msg) => (dispatch, getState) => {
-    dispatch(createAction('ADD_TOAST')(msg))
-    setTimeout(() => dispatch(createAction('DELETE_TOAST')(msg)), 3000)
+    const id = new Date().getTime()
+    dispatch(createAction('ADD_TOAST')({ msg, id }))
+    setTimeout(() => dispatch(createAction('DELETE_TOAST')(id)), 3000)
   },
   setMe: createAction('SET_ME'),
   copyLink: () => (dispatch, getState) => {
@@ -117,6 +119,7 @@ export const AppActions = {
     }
     const msg = `https://awp-pwa.firebaseapp.com/r/${roomPin}`
     copyClipbaord(msg)
+    dispatch(AppActions.addToast('Copied to clipboard'))
   }
 }
 
@@ -178,7 +181,7 @@ const generateRoomID = async function() {
 export const CreateRoomPageActions = {
   createRoom: (roomName, nominateTime) => async (dispatch, getState, firebase) => {
     dispatch(createAction('LOADING_START')());
-    
+
     const roomCfg = {
       name: roomName,
       nominateTime: nominateTime,
@@ -326,7 +329,7 @@ export const OrderPageActions = {
         const a = new Array(Math.abs(diff)).fill(1);
         a.forEach(() => menuRef.child('users').push(me));
       }
-      
+
     })
   },
   endOrder: () => (dispatch, getState, firebase) => {

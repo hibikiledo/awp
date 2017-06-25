@@ -21,6 +21,7 @@
 }
 
 .add-menu > .add-btn {
+  cursor: pointer;
   width: 20%;
   float: right;
   text-align: center;
