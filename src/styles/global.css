@@ -5,3 +5,12 @@ body {
 .full-width {
   margin: 0 -8px
 }
+
+@media (min-width: 550px) {
+  .wrapper,
+  .page-container {
+    width: 550px;
+    margin: auto;
+  }
+}
+

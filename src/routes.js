@@ -69,11 +69,13 @@ export default class AppRoute extends React.Component {
                     <AppNavBar />
                 </nav>
                 <AppLoadingPage />
-                <Route path="/" component={ConnectedToast} />
-                <Route path="/" component={ConnectedChatContainer} />
-                <Route exact path="/" component={LandingPage} />
-                <Route exact path="/create" component={CreateRoomPage} />
-                <Route exact path="/r/:id" component={RoomPage} />
+                <div className="wrapper">
+                    <Route path="/" component={ConnectedToast} />
+                    <Route path="/" component={ConnectedChatContainer} />
+                    <Route exact path="/" component={LandingPage} />
+                    <Route exact path="/create" component={CreateRoomPage} />
+                    <Route exact path="/r/:id" component={RoomPage} />
+                </div>
             </div>
         )
     }
