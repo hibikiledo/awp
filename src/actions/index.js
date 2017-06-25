@@ -124,6 +124,7 @@ export const LandingPageActions = {
 
         const val = s.val()
         if (val) {
+          Rooms.updateRoom(pin, val)
           dispatch(AppActions.setRoom(val))
           dispatch(AppActions.setRoomPin(pin))
           dispatch(push('/r/' + pin));
