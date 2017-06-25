@@ -6,11 +6,15 @@ import PropTypes from 'prop-types';
 import TextInput from '../TextInput';
 import PageContainer from '../PageContainer';
 import PageSection from '../PageSection';
+import SquareImage from '../SquareImage';
 import {partial,debounce} from 'lodash';
 import searchIcon from './images/search.png';
 
-const RestaurantSearchListItem = ({restaurantName, onSelect}) => (
+const RestaurantSearchListItem = ({imageUrl, restaurantName, onSelect}) => (
   <div className="restuarant-search-item">
+    <div className="image">
+      <SquareImage imageUrl={imageUrl} />
+    </div>
     <span className="title">{restaurantName}</span>
     <span className="button" onClick={onSelect}>+</span>
     <div className="clear"></div>
@@ -54,6 +58,14 @@ class RestaurantSearchAPI {
         .then(partial(this.callSearchApi.bind(this), keyword));
     } 
   }
+  searchNearBy() {
+    if (!navigator.geolocation) {
+       return Promise.reject(new Error('Geolocation feature not found'));
+    }
+
+    return this.getCurrentPosition()
+        .then(partial(this.callSearchApi.bind(this), null));
+  }
   getCurrentPosition() {
     return new Promise(function (resolve) {
       navigator.geolocation.getCurrentPosition(resolve);
@@ -61,11 +73,26 @@ class RestaurantSearchAPI {
   }
   callSearchApi(keyword, position) {
     // position.coords.latitude + "," + position.coords.longitude
-    let location, radius;
+    let location, radius, promise;
 
     if (position) {
       location = new global.google.maps.LatLng(position.coords.latitude,position.coords.longitude);
       radius = 10e3;
+    }
+
+    if (location && !keyword) {
+      const request = {
+        location,
+        type: 'restaurant',
+        radius: 5e2,
+        rankBy: global.google.maps.places.RankBy.PROMINENCE
+      };
+
+      return new Promise((resolve, reject) => {
+        global
+          .placesService
+          .nearbySearch(request, resolve)
+      }).then(result => result ? result.map(p => this.googlePlaceToRestaurant(p)) : []);
     }
 
     return new Promise((resolve, reject) => {
@@ -94,7 +121,7 @@ class RestaurantSearchAPI {
   }
 }
 
-export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants}) => (
+export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants, nearbyRestaurants}) => (
   <PageContainer center={false}>
     <PageSection>
       <RestaurantSearchInput
@@ -103,9 +130,16 @@ export const RestaurantSearchBox = ({onSelect, onChange, keyword, restaurants}) 
         onSelect={onSelect}/>
     </PageSection>
     <PageSection flex="1" scroll>
-      {restaurants.map((r, i) => <RestaurantSearchListItem
+      {!keyword && <h3 className={"nearby-search-heading"}>Nearby Restaurants</h3>}
+      {!keyword && nearbyRestaurants.slice(0, 5).map((r, i) => <RestaurantSearchListItem
         key={i}
         restaurantName={r.name}
+        imageUrl={r.imageUrl}
+        onSelect={() => onSelect(r)}/>)}
+      {keyword && restaurants.map((r, i) => <RestaurantSearchListItem
+        key={i}
+        restaurantName={r.name}
+        imageUrl={r.imageUrl}
         onSelect={() => onSelect(r)}/>)}
     </PageSection>
   </PageContainer>
@@ -120,17 +154,23 @@ export default class RestaurantSearchBoxContainer extends Component {
     this.api = new RestaurantSearchAPI();
     this.state = {
       keyword: '',
-      restaurants: []
+      restaurants: [],
+      nearbyRestaurants: []
     };
-    this.searchRestaurant = debounce(this.searchRestaurant.bind(this), 1000);
   }
-  searchRestaurant(keyword) {
+  searchRestaurant = debounce((keyword) => {
     this
       .api
       .searchByKeyword(keyword)
       .then(restuarants => this.setState({
         restaurants: restuarants || []
       }))
+  }, 1000)
+  searchNearbyRestaurant = () => {
+    this.api.searchNearBy()
+      .then(restaurants => this.setState({
+        nearbyRestaurants: restaurants || []
+      }));
   }
   onChange = (keyword) => {
     if (!keyword) {
@@ -153,11 +193,15 @@ export default class RestaurantSearchBoxContainer extends Component {
     });
     this.props.onSelect(r);
   }
+  componentDidMount() {
+    this.searchNearbyRestaurant();
+  }
   render() {
     return (<RestaurantSearchBox
       keyword={this.state.keyword}
       onChange={this.onChange}
       onSelect={this.onSelect}
-      restaurants={this.state.restaurants}/>);
+      restaurants={this.state.restaurants}
+      nearbyRestaurants={this.state.nearbyRestaurants}/>);
   }
 };

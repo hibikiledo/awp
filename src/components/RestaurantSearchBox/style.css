@@ -36,6 +36,7 @@
 
 .search-input > .button {
   cursor: pointer;
+  vertical-align: top;
 }
 
 .search-input > .clear {
@@ -45,25 +46,48 @@
 /**
 * RestaurantSearchListItem
 */
+.restuarant-search-item {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #e0e0e0;
+}
 
 .restuarant-search-item > .title,
+.restuarant-search-item > .image,
 .restuarant-search-item > .button {
   display: inline-block;
   box-sizing: border-box;
-  line-height: 24px;
+  line-height: 20px;
 	font-family: Roboto, Arial;
 	font-size: 14px;
 	color: #3f3f3f;
   padding: 8px;
-  height: 40px;
+  vertical-align: top;
+}
+
+.restuarant-search-item > .image {
+  width: 40px;
+  padding: 4px;
 }
 
 .restuarant-search-item > .title {
-  width: calc(100% - 40px);
+  width: calc(100% - 80px);
 }
 
 .restuarant-search-item > .button {
   cursor: pointer;
   text-align: center;
   width: 40px;
+}
+
+.restuarant-search-item > .clear {
+  clear: both;
+}
+
+.nearby-search-heading {
+  width: 126px;
+	height: 16px;
+	font-family: Roboto, Arial;
+	font-size: 14px;
+	font-weight: 900;
+	color: #424242;
 }
