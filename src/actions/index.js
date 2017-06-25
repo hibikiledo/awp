@@ -198,7 +198,10 @@ export const CreateRoomPageActions = {
 export const RoomPageActions = {
   subscribeRoom: (pin) => async (dispatch, getState, firebase) => {
     let notified = false
+    dispatch(createAction('LOADING_START')());
+    
     return await fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
+      dispatch(createAction('LOADING_END')());
       if (!s.val()) {
         console.error("Room not found")
         return dispatch(push('/'))

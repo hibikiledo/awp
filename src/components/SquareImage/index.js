@@ -8,7 +8,7 @@ const SquareImage = ({ imageUrl }) => (
         background: `url(${imageUrl || placeholdImage}) top center no-repeat`,
         backgroundSize: 'cover'
     }}>
-        <img src={imageUrl || placeholdImage} />
+        <img src={imageUrl || placeholdImage} alt="image"/>
     </div>   
 )
 
