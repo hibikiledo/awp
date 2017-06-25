@@ -84,8 +84,7 @@ class RestaurantSearchAPI {
       const request = {
         location,
         type: 'restaurant',
-        radius: 5e2,
-        rankBy: global.google.maps.places.RankBy.PROMINENCE
+        rankBy: global.google.maps.places.RankBy.DISTANCE
       };
 
       return new Promise((resolve, reject) => {
