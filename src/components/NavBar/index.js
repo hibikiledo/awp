@@ -25,9 +25,9 @@ export default function NavBar({
 }) {
   return (
     <div className="nav-bar">
-      <img className="app-icon left" src={circularIcon} onClick={() => onAppIconClick()}/>
+      <img className="app-icon left" alt="App Logo" src={circularIcon} onClick={() => onAppIconClick()}/>
       <span className="title">{title}</span>
-      {showCopy ? 
+      {showCopy ?
         <img className="action-icon first" src={copyIcon} id="clipboard" onClick={() => onCopyIconClick()}/>
         : null}
     </div>
