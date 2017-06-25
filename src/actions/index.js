@@ -109,10 +109,21 @@ export const AppActions = {
 }
 
 export const LandingPageActions = {
-  tryJoinRoomWithPin: (pin) => (dispatch, getState, firebase) => {
+  tryJoinRoomWithPin: (pin) => async (dispatch, getState, firebase) => {
     if (isBlank(pin)) {
       return dispatch(AppActions.addToast("Pin cannot empty"))
     }
+    if (!getState().firebaseConnected) {
+      try {
+        const room = await Rooms.findRoom(pin)
+        dispatch(AppActions.setRoom(room))
+        dispatch(AppActions.setRoomPin(pin))
+        dispatch(push('/r/' + pin));
+      } catch(e) {
+        dispatch(AppActions.addToast('[Offline] Invalid Pin'))
+      }
+    }
+
     firebase
       .database()
       .ref(`room/${pin}`)
@@ -155,6 +166,11 @@ export const RoomPageActions = {
       return dispatch(AppActions.addToast("Name cannot be blank"))
     }
     name = _.trim(name)
+    if (!getState().firebaseConnected) {
+      dispatch(AppActions.setMe(name))
+      dispatch(ChatActions.joinOrCreateChatRoom(roomId))
+    }
+    
     firebase
       .database()
       .ref(`room/${roomId}/users`)
