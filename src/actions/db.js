@@ -11,16 +11,16 @@ export const chats = new PouchDB("chats")
 export const Rooms = {
   findRoom: async (roomPin) => {
     try {
-      return rooms.get(roomPin)
+      return await rooms.get(roomPin)
     } catch(e) {
       return null
     }
   },
   findOrCreateRoom: async (roomPin) => {
     try {
-      return rooms.get(roomPin)
+      return await rooms.get(roomPin)
     } catch(e) {
-      return rooms.put({
+      return await rooms.put({
         _id: roomPin
       })
     }
