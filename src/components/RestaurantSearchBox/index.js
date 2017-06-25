@@ -3,7 +3,6 @@ import './style.css';
 import React, {Component} from 'react';
 
 import PropTypes from 'prop-types';
-import TextInput from '../TextInput';
 import PageContainer from '../PageContainer';
 import PageSection from '../PageSection';
 import SquareImage from '../SquareImage';
@@ -73,7 +72,7 @@ class RestaurantSearchAPI {
   }
   callSearchApi(keyword, position) {
     // position.coords.latitude + "," + position.coords.longitude
-    let location, radius, promise;
+    let location, radius;
 
     if (position) {
       location = new global.google.maps.LatLng(position.coords.latitude,position.coords.longitude);

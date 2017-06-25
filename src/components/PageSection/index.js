@@ -8,7 +8,7 @@ class Page extends Component {
       <div className="page-section" style={{
         flex: flex || null,
         padding: padding === false ? '0' : null,
-        overflow: scroll ? 'scroll' : null
+        overflowY: scroll ? 'auto' : null
       }} {...props}>
         {children}
       </div>

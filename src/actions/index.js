@@ -159,7 +159,8 @@ export const LandingPageActions = {
   },
   navigateToCreateRoomPage: () => (dispatch, getState, firebase) => {
     dispatch(push('/create'))
-  }
+  },
+  clearState: () => createAction('RESET_APP')()
 }
 
 const generateRoomID = async function() {

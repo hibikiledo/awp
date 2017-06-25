@@ -8,12 +8,10 @@ import BorderlessBtn from '../../components/BorderlessBtn'
 import FormGroup from '../../components/FormGroup'
 import FormSection from '../../components/FormSection'
 import { LandingPageActions } from '../../actions'
-import { Link } from 'react-router-dom'
 import PageContainer from '../../components/PageContainer'
 import PageSection from '../../components/PageSection'
 import PrimaryBtn from '../../components/PrimaryBtn'
 import PropTypes from 'prop-types'
-import RestaurantSearchBox from '../../components/RestaurantSearchBox';
 import TextInput from '../../components/TextInput'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -25,6 +23,10 @@ class LandingPage extends Component {
 
   state = {
     pin: ''
+  }
+
+  componentDidMount() {
+    this.props.clearState();
   }
 
   renderRequestPin() {
