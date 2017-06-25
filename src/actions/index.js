@@ -4,6 +4,11 @@ import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
 
 let currentChatRoomRef = null
+let subscribed = []
+function fbSubsc(path, cb) {
+  path.on('value', cb)
+  subscribed.push(path)
+}
 
 function isBlank(s) {
   return _.isString(s) ? !_.trim(s) : _.isEmpty(s)
@@ -79,6 +84,8 @@ export const ChatActions = {
 
 export const AppActions = {
   resetApp: () => (dispatch, getState, firebase) => {
+    _.each(subscribed, (s) => s.off())
+    subscribed = []
     dispatch(createAction('RESET_APP')())
     dispatch(push('/'))
   },
@@ -126,22 +133,19 @@ export const LandingPageActions = {
 export const RoomPageActions = {
   subscribeRoom: (pin) => (dispatch, getState, firebase) => {
     let notified = false
-    firebase
-      .database()
-      .ref(`room/${pin}`)
-      .on('value', (s) => {
-        if (!s.val()) {
-          console.error("Room not found")
-          return dispatch(push('/'))
-        }
-        if (notified === false) {
-          pushNotify(`You just join room ${pin}, please enter your name.`)
-          notified = true
-        }
+    fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
+      if (!s.val()) {
+        console.error("Room not found")
+        return dispatch(push('/'))
+      }
+      if (notified === false) {
+        pushNotify(`You just join room ${pin}, please enter your name.`)
+        notified = true
+      }
 
-        dispatch(AppActions.setRoomPin(pin))
-        dispatch(AppActions.setRoom(s.val()))
-      })
+      dispatch(AppActions.setRoomPin(pin))
+      dispatch(AppActions.setRoom(s.val()))
+    })
   },
   tryJoinRoomWithName: (roomId, name) => (dispatch, getState, firebase) => {
     if (isBlank(name)) {
