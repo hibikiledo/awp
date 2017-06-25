@@ -3,17 +3,9 @@ import './styles/global.css'
 import { AppActions, ChatActions } from './actions'
 
 import ChatContainer from './components/ChatContainer'
-<<<<<<< ours
-import CreateRoomPage from './pages/CreateRoomPage'
-import LandingPage from './pages/LandingPage';
 import LoadingOverlay from './components/LoadingOverlay';
-=======
-// import CreateRoomPage from './pages/CreateRoomPage'
-// import LandingPage from './pages/LandingPage';
->>>>>>> theirs
 import NavBar from './components/NavBar';
 import React from 'react';
-// import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
