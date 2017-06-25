@@ -2,12 +2,14 @@ import _ from 'lodash'
 import copyClipbaord from './clipboard'
 import {createAction} from 'redux-actions'
 import {push} from 'react-router-redux'
+import {chats, Rooms} from './db'
 
 let currentChatRoomRef = null
 let subscribed = []
-function fbSubsc(path, cb) {
-  path.on('value', cb)
+async function fbSubsc(path, cb) {
+  let result = path.on('value', cb)
   subscribed.push(path)
+  return await result
 }
 
 function isBlank(s) {
@@ -168,9 +170,9 @@ export const CreateRoomPageActions = {
 }
 
 export const RoomPageActions = {
-  subscribeRoom: (pin) => (dispatch, getState, firebase) => {
+  subscribeRoom: (pin) => async (dispatch, getState, firebase) => {
     let notified = false
-    fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
+    return await fbSubsc(firebase.database().ref(`room/${pin}`), (s) => {
       if (!s.val()) {
         console.error("Room not found")
         return dispatch(push('/'))
@@ -179,7 +181,7 @@ export const RoomPageActions = {
         pushNotify(`You just join room ${pin}, please enter your name.`)
         notified = true
       }
-
+      Rooms.updateRoom(pin, s.val())
       dispatch(AppActions.setRoomPin(pin))
       dispatch(AppActions.setRoom(s.val()))
     })
