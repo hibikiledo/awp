@@ -1,10 +1,12 @@
-import React from 'react';
-import logo from './images/logo.jpg';
 import './style.css';
+
+import React from 'react';
+import logo from './images/logo.png';
+import logo2x from './images/logo@2x.png'
 
 const AppLogo = (props) => (
     <div className="app-logo" {...props}>
-        <img src={logo} className="image" />
+        <img src={logo} srcSet={`${logo2x} 2x`} className="image" />
     </div>
 );
 
