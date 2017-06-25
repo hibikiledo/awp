@@ -8,12 +8,25 @@ import LandingPage from './pages/LandingPage';
 import LoadingOverlay from './components/LoadingOverlay';
 import NavBar from './components/NavBar';
 import React from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import RoomPage from './pages/RoomPage';
 import { Route } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux';
 
 function Toast({ toasts }) {
+    const items = toasts.map((t, idx) => (
+        <div
+            key={idx}
+            style={{
+                padding: '12px',
+                fontFamily: 'Roboto, Arial',
+                background: '#444',
+                color: 'white',
+                textAlign: 'center',
+                fontSize: '18px',
+            }}>{t.msg}</div>
+    ))
     return (
         <div style={{
             position: 'fixed',
@@ -22,19 +35,12 @@ function Toast({ toasts }) {
             right: 0,
             zIndex: 1,
         }}>
-            {toasts.map((msg, idx) => (
-                <div
-                    key={idx}
-                    style={{
-                        padding: '12px',
-                        fontFamily: 'Roboto, Arial',
-                        background: '#444',
-                        color: 'white',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        fontSize: '18px',
-                    }}>{msg}</div>
-            ))}
+            <ReactCSSTransitionGroup
+                transitionName="toast"
+                transitionEnterTimeout={250}
+                transitionLeaveTimeout={150}>
+                    {items}
+            </ReactCSSTransitionGroup>
         </div>
     )
 }

@@ -76,7 +76,7 @@ const appReducer = combineReducers({
     }, []),
     toasts: handleActions({
         ADD_TOAST: (toasts, action) => [...toasts, action.payload],
-        DELETE_TOAST: (toasts, action) => toasts.filter((msg) => msg !== action.payload)
+        DELETE_TOAST: (toasts, action) => toasts.filter((t) => t.id !== action.payload)
     }, []),
     chat: handleActions({
         CHAT_MESSAGES: (chat, action) => {
