@@ -8,7 +8,7 @@ export default (props) => {
   const { chat, showChatDialog, closeChatDialog, chatDialogShow, sendMessage } = props
 
   if (chat === null) {
-    return null
+    return <div className="chatContainer collapsed"></div>
   }
   const classExpanded = chatDialogShow ? "expanded": "collapsed"
   return (
