@@ -42,6 +42,7 @@ class LandingPage extends Component {
               aria-label="room pin"
               value={this.state.pin}
               type="number"
+              placeholder="Room PIN"
               onChange={(e) => {
               this.setState({ pin: e.target.value })
             }} />

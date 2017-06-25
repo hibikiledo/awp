@@ -5,6 +5,10 @@ import { handleActions } from 'redux-actions'
 import { routerReducer } from 'react-router-redux'
 
 const appReducer = combineReducers({
+    isLoading: handleActions({
+        LOADING_START: () => true,
+        LOADING_END: () => false
+    }, false),
     firebase: firebaseReducer,
     router: routerReducer,
     roomPin: handleActions({
