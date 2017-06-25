@@ -74,6 +74,9 @@ export const ChatActions = {
       console.error("Chat room subscribe is not active")
       return;
     }
+    if (isBlank(message)) {
+      return;
+    }
     const state = getState()
     if (isBlank(state.me)) {
       console.error("Chat room cannot find active user name")
