@@ -1,3 +1,49 @@
+@keyframes chatCtnAnim {
+    0% {
+      background: rgba(1,1,1,0);
+    }
+    100% {
+      background: rgba(1,1,1,0.6);
+    }
+}
+
+@keyframes chatCtnAnimOut {
+    0% {
+      position: fixed;
+      top: 61px;
+      right: 0;
+      background: rgba(1,1,1,0.6);
+    }
+    100% {
+      position: fixed;
+      top: 61px;
+      right: 0;
+      background: rgba(1,1,1,0);
+    }
+}
+
+@keyframes chatWrapperAnim {
+    0% {
+      right: 100%;
+      left: -100%;
+    }
+    100% {
+      left: 0;
+      right: 30px;
+    }
+}
+
+@keyframes chatWrapperAnimOut {
+    0% {
+      left: 0;
+      right: 30px;
+    }
+    100% {
+      right: 100%;
+      left: -100%;
+    }
+}
+
 .chatContainer {
   position: absolute;
   left: 0;
@@ -11,7 +57,13 @@
   right: 0;
   bottom: 0;
   z-index: 1000;
-  background: rgba(1,1,1,0.6)
+  background: rgba(1,1,1,0.6);
+  animation-name: chatCtnAnim;
+  animation-duration: 0.5s;
+}
+.chatContainer.collapsed {
+  animation-name: chatCtnAnimOut;
+  animation-duration: 0.5s;
 }
 
 .chatWrapper {
@@ -21,6 +73,14 @@
   top: 0;
   bottom: 0;
   background: #fff;
+}
+.chatWrapper.expanded {
+  animation-name: chatWrapperAnim;
+  animation-duration: 0.5s;
+}
+.chatWrapper.collapsed {
+  animation-name: chatWrapperAnimOut;
+  animation-duration: 0.5s;
 }
 
 .chatContainer .chat-btn {
