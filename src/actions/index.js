@@ -174,7 +174,7 @@ export const CreateRoomPageActions = {
     let roomId = await generateRoomID()
     console.log("ROOM ID:", roomId)
 
-    let newRoom = firebase.database()
+    let newRoom = await firebase.database()
       .ref('room/' + roomId)
       .set(roomCfg);
 
